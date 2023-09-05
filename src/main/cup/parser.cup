@@ -15,6 +15,24 @@ terminal OPEN_BRACKET;
 terminal CLOSE_BRACKET;
 terminal INTEGER_CONSTANT;
 terminal IDENTIFIER;
+terminal COMA;
+terminal MAYOROIGUAL;
+terminal MAYOR;
+terminal IGUAL;
+terminal MENOR;
+terminal MENOROIGUAL;
+terminal AND;
+terminal NOT;
+terminal OR;
+terminal OPEN_CORCHETE;
+terminal CLOSE_CORCHETE;
+terminal PYC;
+
+terminal OPEN_LLAVE;
+terminal CLOSE_LLAVE;
+terminal STRING_CONSTANT;
+terminal FLOAT_CONSTANT;
+terminal INT_CONSTANT;
 
 // Non Terminals
 non terminal sentence;
