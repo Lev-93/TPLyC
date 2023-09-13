@@ -27,6 +27,9 @@ terminal OR;
 terminal OPEN_CORCHETE;
 terminal CLOSE_CORCHETE;
 terminal PYC;
+terminal WRITE;
+terminal READ;
+terminal INIT;
 
 terminal OPEN_LLAVE;
 terminal CLOSE_LLAVE;

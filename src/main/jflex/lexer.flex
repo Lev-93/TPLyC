@@ -64,13 +64,15 @@ float = "float"
 int = "int"
 string = "string"
 
-and="&&"
-or="||"
+and="&&"|"and"
+or="||"|"or"
 not="!!"
 
 firstindexof="firstindexof"
 timer="timer"
-
+read="read"
+write="write"
+init="init"
 
 WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
@@ -127,6 +129,9 @@ stringConstant = \"{CualquierCaracter}*\"
   {string}                                  { return symbol(ParserSym.STRING); }
   {timer}                                   { return symbol(ParserSym.TIMER); }
   {firstindexof}                            { return symbol(ParserSym.FIRSTINDEXOF); }
+  {read}                                    { return symbol(ParserSym.READ); }
+  {write}                                   { return symbol(ParserSym.WRITE); }
+  {init}                                    { return symbol(ParserSym.INIT); }
 
   /* constantes */
   {IntegerConstant}                         { if(Parseint(Integer.ParseInt(yytext())>32767)){System.out.println("constante fuera de rango");throw new InvalidIntegerException(yytext());}else{return symbol(ParserSym.INTEGER_CONSTANT, yytext());} }
