@@ -134,7 +134,7 @@ stringConstant = \"{CualquierCaracter}*\"
   {init}                                    { return symbol(ParserSym.INIT); }
 
   /* constantes */
-  {IntegerConstant}                         { if(Parseint(Integer.ParseInt(yytext())>32767)){System.out.println("constante fuera de rango");throw new InvalidIntegerException(yytext());}else{return symbol(ParserSym.INTEGER_CONSTANT, yytext());} }
+  {IntegerConstant}                         { if(Parseint(Integer.ParseInt(yytext())>32767)){System.out.println("constante fuera de rango");throw new InvalidIntegerException(yytext());}else{return symbol(ParserSym.INT_CONSTANT, yytext());} }
   {floatConstant}                           { if(Float.parseFloat(yytext())>3.40282347e+38F) {System.out.println("constante fuera de rango");throw new NumberFormatException(yytext());}else{return symbol(ParserSym.FLOAT_CONSTANT, yytext());} }
   {stringConstant}                          { if((yytext().length()-2)>40){System.out.println("constante fuera de cota");throw new InvalidLengthException(yytext());}else{return symbol(ParserSym.STRING_CONSTANT, yytext());} }
 

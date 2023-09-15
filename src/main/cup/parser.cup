@@ -13,41 +13,79 @@ terminal MULT;
 terminal DIV;
 terminal OPEN_BRACKET;
 terminal CLOSE_BRACKET;
-terminal INTEGER_CONSTANT;
-terminal IDENTIFIER;
+terminal AND;
+terminal NOT;
+terminal OR;
+terminal OPEN_CORCHETE;
+terminal CLOSE_CORCHETE;
+terminal OPEN_LLAVE;
+terminal CLOSE_LLAVE;
+terminal PYC;
 terminal COMA;
 terminal MAYOROIGUAL;
 terminal MAYOR;
 terminal IGUAL;
 terminal MENOR;
 terminal MENOROIGUAL;
-terminal AND;
-terminal NOT;
-terminal OR;
-terminal OPEN_CORCHETE;
-terminal CLOSE_CORCHETE;
-terminal PYC;
+terminal INTEGER_CONSTANT;
+terminal IDENTIFIER;
+
+terminal IF;
+terminal ELSE;
+terminal WHILE;
+terminal FLOAT;
+terminal INT;
+terminal STRING;
+terminal TIMER;
+terminal FIRSTINDEXOF;
 terminal WRITE;
 terminal READ;
 terminal INIT;
 
-terminal OPEN_LLAVE;
-terminal CLOSE_LLAVE;
+
 terminal STRING_CONSTANT;
 terminal FLOAT_CONSTANT;
 terminal INT_CONSTANT;
 
 // Non Terminals
+non terminal principio;
 non terminal sentence;
 non terminal assignment;
 non terminal expression;
 non terminal term;
 non terminal factor;
+non terminal programa;
+non terminal declaracion;
+non terminal seleccion;
+non terminal iteracion;
+non terminal variableIniciada;
 
 // Start Symbol Definition
-start with sentence;
-
+start with principio;
+principio ::= sentence; //dejar hasta que armemos bien el test
+principio ::= INIT OPEN_LLAVE declaracion CLOSE_LLAVE programa;
+declaracion ::= declaracion variableIniciada;
+declaracion ::= variableIniciada;
+variableIniciada ::= INT IDENTIFIER;
+variableIniciada ::= STRING IDENTIFIER;
+variableIniciada ::= FLOAT IDENTIFIER;
+programa ::= programa sentence;
+programa ::= sentence;
+sentence ::= iteracion;
+sentence ::= seleccion;
 sentence ::= assignment {: System.out.println("End"); :};
+iteracion ::= WHILE condicion OPEN_LLAVE programa CLOSE_LLAVE ;
+seleccion ::= IF condicion  OPEN_LLAVE programa CLOSE_LLAVE ;
+seleccion ::= IF condicion OPEN_LLAVE programa CLOSE_LLAVE ELSE OPEN_LLAVE programa CLOSE_LLAVE;
+condicion ::= comparacion;
+condicion ::= condicion OR comparacion;
+condicion ::= condicion AND comparacion;
+comparacion ::= expression comparador expression;
+comparador ::= MAYOROIGUAL;
+comparador ::= MAYOR;
+comparador ::= IGUAL;
+comparador ::= MENOROIGUAL;
+comparador ::= MENOR;
 assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Assignment"); :};
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
