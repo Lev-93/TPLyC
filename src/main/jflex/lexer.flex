@@ -15,7 +15,7 @@ import static lyc.compiler.constants.Constants.*;
 %column
 %throws CompilerException
 %eofval{
-  return symbol(ParserSym.EOF);
+    return symbol(ParserSym.EOF);
 %eofval}
 
 
@@ -30,7 +30,7 @@ import static lyc.compiler.constants.Constants.*;
 
 
 LineTerminator = \r|\n|\r\n
-InputCharacter = [^\r\n]
+//InputCharacter = [^\r\n]
 Identation =  [ \t\f]
 
 Plus = "+"
@@ -42,37 +42,37 @@ OpenBracket = "("
 CloseBracket = ")"
 OpenCorchete = "["
 CloseCorchete = "]"
-OpenLlave ="{"
+OpenLlave = "{"
 CloseLlave = "}"
 PyC = ";"
 Coma = ","
-mayor=">"
-menor="<"
-menoroigual="<="
-mayoroigual=">="
-igual="=="
+Mayor = ">"
+Menor = "<"
+Menoroigual = "<="
+Mayoroigual = ">="
+Igual = "=="
 
 Letter = [a-zA-Z]
 Digit = [0-9]
 
 
-while = "while"
-if = "if"
-else = "else"
+While = "while"
+If = "if"
+Else = "else"
 
-float = "float"
-int = "int"
-string = "string"
+Float = "float"
+Int = "int"
+String = "string"
 
-and="&&"|"and"
-or="||"|"or"
-not="!!"
+And = "&&"
+Or = "||"
+Not = "!!"
 
-firstindexof="firstindexof"
-timer="timer"
-read="read"
-write="write"
-init="init"
+Firstindexof = "firstindexof"
+Timer = "timer"
+Read = "read"
+Write = "write"
+Init = "init"
 
 WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
@@ -80,10 +80,10 @@ IntegerConstant = {Digit}+
 
 CaracteresAdmitidos=@|\?|\"|\.|\,|\+|\t|\n|\/|\_|\:|\;|¿|\*|{Letter}|{Digit}
 CualquierCaracter={CaracteresAdmitidos}|{WhiteSpace}
-Comentario =  "#/"{CualquierCaracter}*"#/"
+Comentario =  "#""/"{CualquierCaracter}*"#""/"
 
-floatConstant = {Digit}*"."{Digit}+ | {Digit}+"."{Digit}*
-stringConstant = \"{CualquierCaracter}*\"
+FloatConstant = {Digit}*"."{Digit}+ | {Digit}+"."{Digit}*
+StringConstant = \"{CualquierCaracter}*\"
 
 %%
 
@@ -93,7 +93,10 @@ stringConstant = \"{CualquierCaracter}*\"
   /* identifiers */
   {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
   /* Constants */
-  {IntegerConstant}                        { return symbol(ParserSym.INTEGER_CONSTANT, yytext()); }
+  {IntegerConstant}                         { if(Integer.parseInt(yytext())>32767){System.out.println("constante fuera de rango");throw new InvalidIntegerException(yytext());}else{return symbol(ParserSym.INTEGER_CONSTANT, yytext());} }
+  {FloatConstant}                           { if(Float.parseFloat(yytext())>3.40282347e+38F) {System.out.println("constante fuera de rango");throw new NumberFormatException(yytext());}else{return symbol(ParserSym.FLOAT_CONSTANT, yytext());} }
+  {StringConstant}                          { if((yytext().length()-2)>40){System.out.println("constante fuera de cota");throw new InvalidLengthException(yytext());}else{return symbol(ParserSym.STRING_CONSTANT, yytext());} }
+
 
   /* operators */
   {Plus}                                    { return symbol(ParserSym.PLUS); }
@@ -103,9 +106,9 @@ stringConstant = \"{CualquierCaracter}*\"
   {Assig}                                   { return symbol(ParserSym.ASSIG); }
   {OpenBracket}                             { return symbol(ParserSym.OPEN_BRACKET); }
   {CloseBracket}                            { return symbol(ParserSym.CLOSE_BRACKET); }
-  {and}                                     { return symbol(ParserSym.AND); }
-  {or}                                      { return symbol(ParserSym.OR); }
-  {not}                                     { return symbol(ParserSym.NOT); }
+  {And}                                     { return symbol(ParserSym.AND); }
+  {Or}                                      { return symbol(ParserSym.OR); }
+  {Not}                                     { return symbol(ParserSym.NOT); }
   {OpenCorchete}                            { return symbol(ParserSym.OPEN_CORCHETE); }
   {CloseCorchete}                           { return symbol(ParserSym.CLOSE_CORCHETE); }
   {OpenLlave}                               { return symbol(ParserSym.OPEN_LLAVE); }
@@ -114,29 +117,24 @@ stringConstant = \"{CualquierCaracter}*\"
   {Coma}                                    { return symbol(ParserSym.COMA); }
 
   /* comparers */
-  {mayor}                                   { return symbol(ParserSym.MAYOR); }
-  {menor}                                   { return symbol(ParserSym.MENOR); }
-  {menoroigual}                             { return symbol(ParserSym.MENOROIGUAL); }
-  {mayoroigual}                             { return symbol(ParserSym.MAYOROIGUAL); }
-  {igual}                                   { return symbol(ParserSym.IGUAL); }
-
+  {Mayor}                                   { return symbol(ParserSym.MAYOR); }
+  {Menor}                                   { return symbol(ParserSym.MENOR); }
+  {Menoroigual}                             { return symbol(ParserSym.MENOROIGUAL); }
+  {Mayoroigual}                             { return symbol(ParserSym.MAYOROIGUAL); }
+  {Igual}                                   { return symbol(ParserSym.IGUAL); }
   /* palabras reservadas */
-  {while}                                   { return symbol(ParserSym.WHILE); }
-  {if}                                      { return symbol(ParserSym.IF); }
-  {else}                                    { return symbol(ParserSym.ELSE); }
-  {float}                                   { return symbol(ParserSym.FLOAT); }
-  {int}                                     { return symbol(ParserSym.INT); }
-  {string}                                  { return symbol(ParserSym.STRING); }
-  {timer}                                   { return symbol(ParserSym.TIMER); }
-  {firstindexof}                            { return symbol(ParserSym.FIRSTINDEXOF); }
-  {read}                                    { return symbol(ParserSym.READ); }
-  {write}                                   { return symbol(ParserSym.WRITE); }
-  {init}                                    { return symbol(ParserSym.INIT); }
+  {While}                                   { return symbol(ParserSym.WHILE); }
+  {If}                                      { return symbol(ParserSym.IF); }
+  {Else}                                    { return symbol(ParserSym.ELSE); }
+  {Float}                                   { return symbol(ParserSym.FLOAT); }
+  {Int}                                     { return symbol(ParserSym.INT); }
+  {String}                                  { return symbol(ParserSym.STRING); }
+  {Timer}                                   { return symbol(ParserSym.TIMER); }
+  {Firstindexof}                            { return symbol(ParserSym.FIRSTINDEXOF); }
+  {Read}                                    { return symbol(ParserSym.READ); }
+  {Write}                                   { return symbol(ParserSym.WRITE); }
+  {Init}                                    { return symbol(ParserSym.INIT); }
 
-  /* constantes */
-  {IntegerConstant}                         { if(Parseint(Integer.ParseInt(yytext())>32767)){System.out.println("constante fuera de rango");throw new InvalidIntegerException(yytext());}else{return symbol(ParserSym.INT_CONSTANT, yytext());} }
-  {floatConstant}                           { if(Float.parseFloat(yytext())>3.40282347e+38F) {System.out.println("constante fuera de rango");throw new NumberFormatException(yytext());}else{return symbol(ParserSym.FLOAT_CONSTANT, yytext());} }
-  {stringConstant}                          { if((yytext().length()-2)>40){System.out.println("constante fuera de cota");throw new InvalidLengthException(yytext());}else{return symbol(ParserSym.STRING_CONSTANT, yytext());} }
 
   /* whitespace */
   {WhiteSpace}                              { /* ignore */ }

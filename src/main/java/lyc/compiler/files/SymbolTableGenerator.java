@@ -8,6 +8,6 @@ public class SymbolTableGenerator implements FileGenerator{
     @Override
     public void generate(FileWriter fileWriter) throws IOException {
         fileWriter.write("NOMBRE TIPODATO VALOR LONGITUD\n");
-        
+
     }
 }

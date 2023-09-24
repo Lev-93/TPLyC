@@ -27,7 +27,6 @@ terminal MAYOR;
 terminal IGUAL;
 terminal MENOR;
 terminal MENOROIGUAL;
-terminal INTEGER_CONSTANT;
 terminal IDENTIFIER;
 
 terminal IF;
@@ -42,10 +41,9 @@ terminal WRITE;
 terminal READ;
 terminal INIT;
 
-
+terminal INTEGER_CONSTANT;
 terminal STRING_CONSTANT;
 terminal FLOAT_CONSTANT;
-terminal INT_CONSTANT;
 
 // Non Terminals
 non terminal principio;
@@ -70,10 +68,10 @@ non terminal lista;
 
 // Start Symbol Definition
 start with principio;
-principio ::= sentence; //dejar hasta que armemos bien el test
+principio ::= programa; //dejar hasta que armemos bien el test
 principio ::= INIT OPEN_LLAVE declaracion CLOSE_LLAVE programa {: System.out.println("Programa"); :};
 declaracion ::= declaracion variableIniciada {: System.out.println("Declaracion de variable"); :};
-declaracion ::= variableIniciada;
+declaracion ::= variableIniciada {: System.out.println("Declaracion de variable"); :};
 variableIniciada ::= INT IDENTIFIER {: System.out.println("Entero"); :};
 variableIniciada ::= STRING IDENTIFIER {: System.out.println("Cadena"); :};
 variableIniciada ::= FLOAT IDENTIFIER {: System.out.println("Flotante"); :};
@@ -82,6 +80,9 @@ programa ::= sentence {: System.out.println("Sentencia"); :};
 sentence ::= iteracion {: System.out.println("Sentencia"); :};
 sentence ::= seleccion {: System.out.println("Sentencia"); :};
 sentence ::= assignment {: System.out.println("End"); :};
+sentence ::= firstindexof{: System.out.println("FirstIndexOf"); :};
+sentence ::= timer {: System.out.println("Timer"); :};
+sentence ::= read{: System.out.println("Read"); :};
 iteracion ::= WHILE condicion OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("iteracion"); :};
 seleccion ::= IF condicion  OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion simple"); :};
 seleccion ::= IF condicion OPEN_LLAVE programa CLOSE_LLAVE ELSE OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion con else"); :};

@@ -1,1 +1,3 @@
+timer(4,write("Hola mundo"))
+c=d*(e-21)/4
 c=d*(e-21)/4
