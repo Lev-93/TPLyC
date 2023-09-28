@@ -4,7 +4,6 @@ import java_cup.runtime.*;
 
 class Parser;
 
-
 // Terminals
 terminal ASSIG;
 terminal PLUS;
@@ -65,28 +64,39 @@ non terminal condicion;
 non terminal comparacion;
 non terminal comparador;
 non terminal lista;
+non terminal elemento;
+non terminal listaFlotante;
+non terminal listaCadena;
+non terminal listaEnteros;
 
 // Start Symbol Definition
 start with principio;
-principio ::= programa; //dejar hasta que armemos bien el test
 principio ::= INIT OPEN_LLAVE declaracion CLOSE_LLAVE programa {: System.out.println("Programa"); :};
 declaracion ::= declaracion variableIniciada {: System.out.println("Declaracion de variable"); :};
 declaracion ::= variableIniciada {: System.out.println("Declaracion de variable"); :};
-variableIniciada ::= INT IDENTIFIER {: System.out.println("Entero"); :};
-variableIniciada ::= STRING IDENTIFIER {: System.out.println("Cadena"); :};
-variableIniciada ::= FLOAT IDENTIFIER {: System.out.println("Flotante"); :};
-programa ::= programa sentence {: System.out.println("Programa"); :};
-programa ::= sentence {: System.out.println("Sentencia"); :};
-sentence ::= iteracion {: System.out.println("Sentencia"); :};
-sentence ::= seleccion {: System.out.println("Sentencia"); :};
-sentence ::= assignment {: System.out.println("End"); :};
-sentence ::= firstindexof{: System.out.println("FirstIndexOf"); :};
-sentence ::= timer {: System.out.println("Timer"); :};
-sentence ::= read{: System.out.println("Read"); :};
-iteracion ::= WHILE condicion OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("iteracion"); :};
-seleccion ::= IF condicion  OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion simple"); :};
-seleccion ::= IF condicion OPEN_LLAVE programa CLOSE_LLAVE ELSE OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion con else"); :};
+variableIniciada ::= INT listaEnteros {: System.out.println("Entero"); :};
+variableIniciada ::= STRING listaCadena {: System.out.println("Cadena"); :};
+variableIniciada ::= FLOAT listaFlotante {: System.out.println("Flotante"); :};
+listaEnteros ::= listaEnteros COMA IDENTIFIER:id {: System.out.println("Variable Entera: " + id ); :};
+listaEnteros ::= IDENTIFIER:id  {: System.out.println("Variable Entera: " + id); :};
+listaFlotante ::= listaFlotante COMA IDENTIFIER:id {: System.out.println("Variable Flotante: " + id); :};
+listaFlotante ::= IDENTIFIER:id  {: System.out.println("Variable Flotante: " + id); :};
+listaCadena ::= listaCadena COMA IDENTIFIER:id {: System.out.println("Cadena:" + id ); :};
+listaCadena ::= IDENTIFIER:id  {: System.out.println("Cadena:" + id); :};
+programa ::= programa sentence {:  :};
+programa ::= sentence {: :};
+sentence ::= iteracion {::};
+sentence ::= seleccion {: :};
+sentence ::= assignment {:  :};
+sentence ::= firstindexof{:  :};
+sentence ::= timer {:  :};
+sentence ::= read{:  :};
+sentence ::= write{: :};
+iteracion ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("iteracion"); :};
+seleccion ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion simple"); :};
+seleccion ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE ELSE OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion con else"); :};
 condicion ::= comparacion {: System.out.println("Condicion"); :};
+condicion ::= NOT comparacion {: System.out.println("Condicion negada"); :};
 condicion ::= condicion OR comparacion {: System.out.println("OR"); :};
 condicion ::= condicion AND comparacion {: System.out.println("AND"); :};
 comparacion ::= expression comparador expression {: System.out.println("Comparacion"); :};
@@ -95,7 +105,7 @@ comparador ::= MAYOR {: System.out.println(">"); :};
 comparador ::= IGUAL {: System.out.println("="); :};
 comparador ::= MENOROIGUAL {: System.out.println("<="); :};
 comparador ::= MENOR {: System.out.println("<"); :};
-assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Assignment"); :};
+assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Asignacion"); :};
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
 expression ::= term {: System.out.println("Expression = Term"); :};
@@ -110,5 +120,9 @@ write ::= WRITE OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET{: System.out.println(" 
 write ::= WRITE OPEN_BRACKET STRING_CONSTANT:constant CLOSE_BRACKET{: System.out.println( "Write(STRING) Constant: " + constant ); :};
 timer ::= TIMER OPEN_BRACKET INTEGER_CONSTANT:constant COMA write CLOSE_BRACKET{: System.out.println("Timer: " + constant); :};
 firstindexof ::= FIRSTINDEXOF OPEN_BRACKET IDENTIFIER:id PYC OPEN_CORCHETE lista CLOSE_CORCHETE CLOSE_BRACKET {: System.out.println("FirstIndexOf: Elemento a buscar" + id );:};
-lista ::= lista COMA factor{: System.out.println("Elemento Lista" ); :};
-lista ::= factor {: System.out.println("Ultimo elemento lista"); :};
+lista::= lista COMA elemento;
+lista::= elemento;
+elemento::=IDENTIFIER:id;
+elemento::=INTEGER_CONSTANT:constant;
+elemento::=FLOAT_CONSTANT:constant;
+elemento::=STRING_CONSTANT:constant;

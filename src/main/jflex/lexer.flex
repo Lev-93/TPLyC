@@ -64,9 +64,9 @@ Float = "float"
 Int = "int"
 String = "string"
 
-And = "&&"
-Or = "||"
-Not = "!!"
+And = "&&" | "and"
+Or = "||" | "or"
+Not = "!!" | "not"
 
 Firstindexof = "firstindexof"
 Timer = "timer"
@@ -80,7 +80,7 @@ IntegerConstant = {Digit}+
 
 CaracteresAdmitidos=@|\?|\"|\.|\,|\+|\t|\n|\/|\_|\:|\;|¿|\*|{Letter}|{Digit}
 CualquierCaracter={CaracteresAdmitidos}|{WhiteSpace}
-Comentario =  "#""/"{CualquierCaracter}*"#""/"
+Comentario =  "#""/"{CualquierCaracter}*"/""#"
 
 FloatConstant = {Digit}*"."{Digit}+ | {Digit}+"."{Digit}*
 StringConstant = \"{CualquierCaracter}*\"
@@ -90,15 +90,7 @@ StringConstant = \"{CualquierCaracter}*\"
 /* keywords */
 
 <YYINITIAL> {
-  /* identifiers */
-  {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
-  /* Constants */
-  {IntegerConstant}                         { if(Integer.parseInt(yytext())>32767){System.out.println("constante fuera de rango");throw new InvalidIntegerException(yytext());}else{return symbol(ParserSym.INTEGER_CONSTANT, yytext());} }
-  {FloatConstant}                           { if(Float.parseFloat(yytext())>3.40282347e+38F) {System.out.println("constante fuera de rango");throw new NumberFormatException(yytext());}else{return symbol(ParserSym.FLOAT_CONSTANT, yytext());} }
-  {StringConstant}                          { if((yytext().length()-2)>40){System.out.println("constante fuera de cota");throw new InvalidLengthException(yytext());}else{return symbol(ParserSym.STRING_CONSTANT, yytext());} }
-
-
-  /* operators */
+   /* operators */
   {Plus}                                    { return symbol(ParserSym.PLUS); }
   {Sub}                                     { return symbol(ParserSym.SUB); }
   {Mult}                                    { return symbol(ParserSym.MULT); }
@@ -135,6 +127,13 @@ StringConstant = \"{CualquierCaracter}*\"
   {Write}                                   { return symbol(ParserSym.WRITE); }
   {Init}                                    { return symbol(ParserSym.INIT); }
 
+  /* Constants */
+  {IntegerConstant}                         { if(Integer.parseInt(yytext())>32767){System.out.println("constante fuera de rango");throw new InvalidIntegerException(yytext());}else{return symbol(ParserSym.INTEGER_CONSTANT, yytext());} }
+  {FloatConstant}                           { if(Float.parseFloat(yytext())>3.40282347e+38F) {System.out.println("constante fuera de rango");throw new NumberFormatException(yytext());}else{return symbol(ParserSym.FLOAT_CONSTANT, yytext());} }
+  {StringConstant}                          { if((yytext().length()-2)>40){System.out.println("constante fuera de cota");throw new InvalidLengthException(yytext());}else{return symbol(ParserSym.STRING_CONSTANT, yytext());} }
+
+ /* identifiers */
+  {Identifier}                             { return symbol(ParserSym.IDENTIFIER, yytext()); }
 
   /* whitespace */
   {WhiteSpace}                              { /* ignore */ }
