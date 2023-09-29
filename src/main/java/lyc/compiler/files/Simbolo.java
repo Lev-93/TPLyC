@@ -15,7 +15,10 @@ public class Simbolo{
         this.nombre = nombre.replaceAll("\"","").replaceAll(" ","_");
         this.tipo = tipo;
         this.valor = valor.replaceAll("\"","");
-        this.longitud = (longitud.length()-2) + "";
+        if(longitud.length()>0)
+            this.longitud = (longitud.length()-2) + "";
+        else
+            this.longitud = "";
     }
     public String getNombre() {
         return nombre;
