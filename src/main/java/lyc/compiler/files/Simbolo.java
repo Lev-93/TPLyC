@@ -6,16 +6,16 @@ import java.io.IOException;
 public class Simbolo{
 
 
-    String nombre;
-    String tipo;
-    String valor;
-    int longitud;
+    public String nombre;
+    public String tipo;
+    public String valor;
+    public String longitud;
 
-    public Simbolo(String nombre, String tipo, String valor, int longitud) {
-        this.nombre = nombre;
+    public Simbolo(String nombre, String tipo, String valor, String longitud) {
+        this.nombre = nombre.replaceAll("\"","").replaceAll(" ","_");
         this.tipo = tipo;
-        this.valor = valor;
-        this.longitud = longitud;
+        this.valor = valor.replaceAll("\"","");
+        this.longitud = (longitud.length()-2) + "";
     }
     public String getNombre() {
         return nombre;
@@ -41,11 +41,11 @@ public class Simbolo{
         this.valor = valor;
     }
 
-    public int getLongitud() {
+    public String getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(int longitud) {
+    public void setLongitud(String longitud) {
         this.longitud = longitud;
     }
 
