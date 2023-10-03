@@ -114,6 +114,7 @@ StringConstant = \"{CualquierCaracter}*\"
   {Menoroigual}                             { return symbol(ParserSym.MENOROIGUAL); }
   {Mayoroigual}                             { return symbol(ParserSym.MAYOROIGUAL); }
   {Igual}                                   { return symbol(ParserSym.IGUAL); }
+
   /* palabras reservadas */
   {While}                                   { return symbol(ParserSym.WHILE); }
   {If}                                      { return symbol(ParserSym.IF); }
