@@ -3,6 +3,8 @@ package lyc.compiler;
 import java_cup.runtime.*;
 import lyc.compiler.files.Simbolo;
 import lyc.compiler.files.SymbolTableGenerator;
+import lyc.compiler.files.IntermediateCodeGenerator;
+import lyc.compiler.files.Terceto;
 
 class Parser;
 
@@ -74,19 +76,26 @@ non terminal listaEnteros;
 // Start Symbol Definition
 start with principio;
 principio ::= INIT OPEN_LLAVE declaracion CLOSE_LLAVE programa {: System.out.println("Programa"); :};
+
 declaracion ::= declaracion variableIniciada {: System.out.println("Declaracion de variable"); :};
 declaracion ::= variableIniciada {: System.out.println("Declaracion de variable"); :};
+
 variableIniciada ::= INT listaEnteros {: System.out.println("Entero");:};
 variableIniciada ::= STRING listaCadena {: System.out.println("Cadena");:};
 variableIniciada ::= FLOAT listaFlotante {: System.out.println("Flotante"); :};
+
 listaEnteros ::= listaEnteros COMA IDENTIFIER:id {: System.out.println("Variable Entera: " + id ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"int","",""));:};
 listaEnteros ::= IDENTIFIER:id  {: System.out.println("Variable Entera: " + id); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"int","",""));:};
+
 listaFlotante ::= listaFlotante COMA IDENTIFIER:id {: System.out.println("Variable Flotante: " + id);new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"float","","")); :};
 listaFlotante ::= IDENTIFIER:id  {: System.out.println("Variable Flotante: " + id);new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"float","","")); :};
+
 listaCadena ::= listaCadena COMA IDENTIFIER:id {: System.out.println("Cadena:" + id );new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"string","","")); :};
 listaCadena ::= IDENTIFIER:id  {: System.out.println("Cadena:" + id);new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"string","","")); :};
+
 programa ::= programa sentence {: System.out.println("Programa Sentencia"); :};
 programa ::= sentence {: System.out.println("Sentencia");:};
+
 sentence ::= iteracion {:System.out.println("Sentencia");:};
 sentence ::= seleccion {:System.out.println("Sentencia"); :};
 sentence ::= assignment {:System.out.println("Sentencia");  :};
@@ -94,38 +103,53 @@ sentence ::= firstindexof{: System.out.println("Sentencia"); :};
 sentence ::= timer {: System.out.println("Sentencia"); :};
 sentence ::= read{: System.out.println("Sentencia"); :};
 sentence ::= write{:System.out.println("Sentencia"); :};
+
 iteracion ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("iteracion"); :};
+
 seleccion ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion simple"); :};
 seleccion ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE ELSE OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion con else"); :};
+
 condicion ::= comparacion {: System.out.println("Condicion"); :};
 condicion ::= NOT comparacion {: System.out.println("Condicion negada"); :};
 condicion ::= condicion OR comparacion {: System.out.println("OR"); :};
 condicion ::= condicion AND comparacion {: System.out.println("AND"); :};
+
 comparacion ::= expression comparador expression {: System.out.println("Comparacion"); :};
+
 comparador ::= MAYOROIGUAL {: System.out.println(">="); :};
 comparador ::= MAYOR {: System.out.println(">"); :};
 comparador ::= IGUAL {: System.out.println("="); :};
 comparador ::= MENOROIGUAL {: System.out.println("<="); :};
 comparador ::= MENOR {: System.out.println("<"); :};
+
 assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Asignacion"); :};
+
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
 expression ::= term {: System.out.println("Expression = Term"); :};
+
 term ::= term MULT factor {: System.out.println("*"); :};
 term ::= term DIV factor {: System.out.println("/"); :};
 term ::= factor {: System.out.println("Term = factor"); :};
-factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
-factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),""));:};
-factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant: " + constant ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_FLOAT",constant.toString(),""));:};
+
+factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); new IntermediateCodeGenerator().getListaTercetos().add(new Terceto(id.toString(),"",""));:};
+factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),""));new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("_"+constant.toString(),"",""));:};
+factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant: " + constant ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_FLOAT",constant.toString(),""));new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("_"+constant.toString(),"",""));:};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
+
 read ::= READ OPEN_BRACKET IDENTIFIER:id  CLOSE_BRACKET {: System.out.println("read(base) *-base es una variable-*");:};
+
 write ::= WRITE OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET{: System.out.println(" *- var1 es una variable numérica definida previamente -*");:};
 write ::= WRITE OPEN_BRACKET STRING_CONSTANT:constant CLOSE_BRACKET{: System.out.println( "Write(STRING) Constant: " + constant );  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_STRING",constant.toString(),constant.toString()));:};
+
 timer ::= TIMER OPEN_BRACKET INTEGER_CONSTANT:constant COMA write CLOSE_BRACKET{: System.out.println("Timer: " + constant);new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),"")); :};
+
 firstindexof ::= FIRSTINDEXOF OPEN_BRACKET IDENTIFIER:id PYC OPEN_CORCHETE lista CLOSE_CORCHETE CLOSE_BRACKET {: System.out.println("FirstIndexOf: Elemento a buscar" + id + "[Lista]");:};
+
 lista::= lista COMA elemento{: System.out.println("Lista , elemento"); :};
 lista::= elemento{: System.out.println("Elemento"); :};
-elemento::=IDENTIFIER:id{: System.out.println("Identificador: " + id); :};
-elemento::=INTEGER_CONSTANT:constant{: System.out.println("Entero: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),""));:};
-elemento::=FLOAT_CONSTANT:constant{: System.out.println("Flotante: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_FLOAT",constant.toString(),""));:};
-elemento::=STRING_CONSTANT:constant{: System.out.println("Cadena: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_STRING",constant.toString(),constant.toString())); :};
+
+elemento::=IDENTIFIER:id{: System.out.println("Identificador: " + id);new IntermediateCodeGenerator().getListaTercetos().add(new Terceto(id.toString(),"","")); :};
+elemento::=INTEGER_CONSTANT:constant{: System.out.println("Entero: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),""));new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("_"+constant.toString(),"",""));:};
+elemento::=FLOAT_CONSTANT:constant{: System.out.println("Flotante: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_FLOAT",constant.toString(),""));new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("_"+constant.toString(),"",""));:};
+elemento::=STRING_CONSTANT:constant{: System.out.println("Cadena: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_STRING",constant.toString(),constant.toString())); new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("_"+constant.toString(),"",""));:};
