@@ -5,9 +5,15 @@ string cadena
 }
 c=3
 a=1
+b=0
+if(a==1){
+if(a==1){
 b=1
 if(a==1){
 b=2
+}
+}
+b=3
 }
 if(a>b){
 b=5
