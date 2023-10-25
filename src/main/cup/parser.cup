@@ -111,12 +111,13 @@ iteracion ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLO
 seleccion ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion simple"); :};
 seleccion ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE ELSE OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion con else"); :};
 
-condicion ::= comparacion {: System.out.println("Condicion"); :};
-condicion ::= NOT comparacion {: System.out.println("Condicion negada"); :};
-condicion ::= condicion OR comparacion {: System.out.println("OR"); :};
-condicion ::= condicion AND comparacion {: System.out.println("AND"); :};
 
-comparacion ::= expression comparador {: Terceto Aux = new Terceto("CMP",""+(new IntermediateCodeGenerator().getListaTercetos().get(new IntermediateCodeGenerator().getP().getIndiceExpresion())),"");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getPila().push(Aux.getNroTerceto());:}  expression {: System.out.println("Comparacion"); :};
+condicion ::= NOT comparacion {: System.out.println("Condicion negada"); :}; //Como controlo esto
+condicion ::= condicion OR comparacion {: System.out.println("OR"); :}; //hay que hacer algo?
+condicion ::= condicion AND comparacion {: System.out.println("AND"); :};
+condicion ::= comparacion {: System.out.println("Condicion"); :};
+
+comparacion ::= expression comparador {: Terceto Aux = new Terceto("CMP",""+(new IntermediateCodeGenerator().getListaTercetos().get(new IntermediateCodeGenerator().getP().getIndiceExpresion())),"");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getPila().push(Aux.getNroTerceto());:}  expression {: System.out.println("Comparacion");Terceto Aux;Aux=(new IntermediateCodeGenerator().getListaTercetos().get((new IntermediateCodeGenerator().getPila().pop())));Aux.setOperador2(""+(new IntermediateCodeGenerator().getP().getIndiceExpresion()));//new IntermediateCodeGenerator().getListaTercetos().set((Aux.getNroTerceto()),Aux); :};
 
 comparador ::= MAYOROIGUAL {: System.out.println(">=");Terceto Aux = new Terceto(">=","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
 comparador ::= MAYOR {: System.out.println(">");Terceto Aux = new Terceto(">","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
@@ -135,7 +136,7 @@ term ::= term DIV factor {: System.out.println("/"); Terceto Aux = new Terceto("
 term ::= factor {: System.out.println("Term = factor"); new IntermediateCodeGenerator().getP().setIndiceTermino(new IntermediateCodeGenerator().getP().getIndiceFactor()); :};
 
 factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id);Terceto Aux= new Terceto(""+id,"",""); new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceFactor(Aux.getNroTerceto());:};
-factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),""));Terceto Aux = new Terceto("_"+constant.toString(),"","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
+factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),""));Terceto Aux = new Terceto("_"+constant.toString(),"","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);//new IntermediateCodeGenerator().getP().setIndiceFactor(Aux.getNroTerceto());:};
 factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant: " + constant ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_FLOAT",constant.toString(),""));Terceto Aux = new Terceto("_"+constant.toString(),"","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceFactor(Aux.getNroTerceto());:};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
 
