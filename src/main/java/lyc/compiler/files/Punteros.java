@@ -1,17 +1,17 @@
 package lyc.compiler.files;
 
 public class Punteros {
-    public int indiceElemento;
-    public int indiceLista;
-    public int indiceFirstIndexOf;
-    public int indiceTimer;
-    public int indiceWrite;
-    public int indiceRead;
-    public int indiceFactor;
-    public int indiceTermino;
-    public int indiceExpresion;
-    public int indiceAsignacion;
-    public int indiceComparador;
+    static int indiceElemento;
+    static int indiceLista;
+    static int indiceFirstIndexOf;
+    static int indiceTimer;
+    static int indiceWrite;
+    static int indiceRead;
+    static int indiceFactor;
+    static int indiceTermino;
+    static int indiceExpresion;
+    static int indiceAsignacion;
+    static int indiceComparador;
 
     public int indiceComparacion;
 
