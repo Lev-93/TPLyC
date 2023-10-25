@@ -17,7 +17,6 @@ public class SymbolTableGenerator implements FileGenerator{
         tablaSimbolos.addAll(set);
         fileWriter.write("NOMBRE|TIPODATO|VALOR|LONGITUD\n");
         for (Simbolo s:tablaSimbolos) {
-            System.out.println(s);
             fileWriter.write(s.toString() + "\n");
         }
     }

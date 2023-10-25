@@ -12,7 +12,7 @@ public class Simbolo{
     public String longitud;
 
     public Simbolo(String nombre, String tipo, String valor, String longitud) {
-        this.nombre = nombre.replaceAll("\"","").replaceAll(" ","_");
+        this.nombre = nombre;
         this.tipo = tipo;
         this.valor = valor.replaceAll("\"","");
         if(longitud.length()>0)
