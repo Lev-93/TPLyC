@@ -5,6 +5,7 @@ import lyc.compiler.files.Simbolo;
 import lyc.compiler.files.SymbolTableGenerator;
 import lyc.compiler.files.IntermediateCodeGenerator;
 import lyc.compiler.files.Terceto;
+import lyc.compiler.files.Punteros;
 
 class Parser;
 
@@ -75,6 +76,7 @@ non terminal listaEnteros;
 
 // Start Symbol Definition
 start with principio;
+
 principio ::= INIT OPEN_LLAVE declaracion CLOSE_LLAVE programa {: System.out.println("Programa"); :};
 
 declaracion ::= declaracion variableIniciada {: System.out.println("Declaracion de variable"); :};
@@ -124,32 +126,33 @@ comparador ::= MENOR {: System.out.println("<"); :};
 
 assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Asignacion"); :};
 
-expression ::= expression PLUS term {: System.out.println("+"); :};
-expression ::= expression SUB term {: System.out.println("-"); :};
-expression ::= term {: System.out.println("Expression = Term"); :};
+expression ::= expression PLUS term {: System.out.println("+"); Terceto Aux = new Terceto("+",""+(new IntermediateCodeGenerator().getListaTercetos().get(new IntermediateCodeGenerator().getP().getIndiceExpresion())), ""+(new IntermediateCodeGenerator().getListaTercetos().get(new IntermediateCodeGenerator().getP().getIndiceTermino()))); new IntermediateCodeGenerator().getListaTercetos().add(Aux); new IntermediateCodeGenerator().getP().setIndiceExpresion(Aux.getNroTerceto()); :};
+expression ::= expression SUB term {: System.out.println("-"); Terceto Aux = new Terceto("-",""+(new IntermediateCodeGenerator().getListaTercetos().get(new IntermediateCodeGenerator().getP().getIndiceExpresion())), ""+(new IntermediateCodeGenerator().getListaTercetos().get(new IntermediateCodeGenerator().getP().getIndiceTermino()))); new IntermediateCodeGenerator().getListaTercetos().add(Aux); new IntermediateCodeGenerator().getP().setIndiceExpresion(Aux.getNroTerceto()); :};
+expression ::= term {: System.out.println("Expression = Term"); new IntermediateCodeGenerator().getP().setIndiceExpresion(new IntermediateCodeGenerator().getP().getIndiceTermino()); :};
 
-term ::= term MULT factor {: System.out.println("*"); :};
-term ::= term DIV factor {: System.out.println("/"); :};
-term ::= factor {: System.out.println("Term = factor"); :};
+term ::= term MULT factor {: System.out.println("*"); Terceto Aux = new Terceto("*",""+(new IntermediateCodeGenerator().getListaTercetos().get(new IntermediateCodeGenerator().getP().getIndiceTermino())),""+ (new IntermediateCodeGenerator().getListaTercetos().get(new IntermediateCodeGenerator().getP().getIndiceFactor()))); new IntermediateCodeGenerator().getListaTercetos().add(Aux); new IntermediateCodeGenerator().getP().setIndiceTermino(Aux.getNroTerceto()); :};
+term ::= term DIV factor {: System.out.println("/"); Terceto Aux = new Terceto("/",""+(new IntermediateCodeGenerator().getListaTercetos().get(new IntermediateCodeGenerator().getP().getIndiceTermino())),""+ (new IntermediateCodeGenerator().getListaTercetos().get(new IntermediateCodeGenerator().getP().getIndiceFactor()))); new IntermediateCodeGenerator().getListaTercetos().add(Aux); new IntermediateCodeGenerator().getP().setIndiceTermino(Aux.getNroTerceto()); :};
+term ::= factor {: System.out.println("Term = factor"); new IntermediateCodeGenerator().getP().setIndiceTermino(new IntermediateCodeGenerator().getP().getIndiceFactor()); :};
 
-factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); new IntermediateCodeGenerator().getListaTercetos().add(new Terceto(id.toString(),"",""));:};
-factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),""));new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("_"+constant.toString(),"",""));:};
-factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant: " + constant ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_FLOAT",constant.toString(),""));new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("_"+constant.toString(),"",""));:};
+factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id);Terceto Aux= new Terceto(""+id,"",""); new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceFactor(Aux.getNroTerceto());:};
+factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),""));Terceto Aux = new Terceto("_"+constant.toString(),"","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
+factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant: " + constant ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_FLOAT",constant.toString(),""));Terceto Aux = new Terceto("_"+constant.toString(),"","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceFactor(Aux.getNroTerceto());:};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
 
 read ::= READ OPEN_BRACKET IDENTIFIER:id  CLOSE_BRACKET {: System.out.println("read(base) *-base es una variable-*");:};
 
-write ::= WRITE OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET{: System.out.println(" *- var1 es una variable numérica definida previamente -*");:};
-write ::= WRITE OPEN_BRACKET STRING_CONSTANT:constant CLOSE_BRACKET{: System.out.println( "Write(STRING) Constant: " + constant );  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_STRING",constant.toString(),constant.toString()));:};
+write ::= WRITE OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET{: System.out.println(" *- var1 es una variable numérica definida previamente -*");new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("WRITE",""+id,""));:};
+write ::= WRITE OPEN_BRACKET STRING_CONSTANT:constant CLOSE_BRACKET{: System.out.println( "Write(STRING) Constant: " + constant );  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_STRING",constant.toString(),constant.toString()));new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("WRITE",""+constant.toString(),""));:};
 
 timer ::= TIMER OPEN_BRACKET INTEGER_CONSTANT:constant COMA write CLOSE_BRACKET{: System.out.println("Timer: " + constant);new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),"")); :};
+//COMO LE HAGO A TIMER
 
-firstindexof ::= FIRSTINDEXOF OPEN_BRACKET IDENTIFIER:id PYC OPEN_CORCHETE lista CLOSE_CORCHETE CLOSE_BRACKET {: System.out.println("FirstIndexOf: Elemento a buscar" + id + "[Lista]");:};
+firstindexof ::= FIRSTINDEXOF OPEN_BRACKET IDENTIFIER:id PYC OPEN_CORCHETE{:Terceto Aux = new Terceto("=","@aux",id.toString());new IntermediateCodeGenerator().getListaTercetos().add(Aux);:} lista CLOSE_CORCHETE CLOSE_BRACKET {: System.out.println("FirstIndexOf: Elemento a buscar" + id + "[Lista]");:};
 
-lista::= lista COMA elemento{: System.out.println("Lista , elemento"); :};
-lista::= elemento{: System.out.println("Elemento"); :};
+lista::= lista COMA elemento{: System.out.println("Lista , elemento");Terceto Aux = new Terceto("CMP","@aux",""+(new IntermediateCodeGenerator().getP().getIndiceElemento()));new IntermediateCodeGenerator().getListaTercetos().add(Aux);Terceto Aux2 = new Terceto("BNE",""+(Aux.getNroTerceto()+3),"");new IntermediateCodeGenerator().getListaTercetos().add(Aux2);new IntermediateCodeGenerator().getPila().push(Aux2.getNroTerceto()); :};
+lista::= elemento{: System.out.println("Elemento"); Terceto Aux = new Terceto("CMP","@aux",""+(new IntermediateCodeGenerator().getP().getIndiceElemento()));new IntermediateCodeGenerator().getListaTercetos().add(Aux);Terceto Aux2 = new Terceto("BNE",""+(Aux.getNroTerceto()+3),"");new IntermediateCodeGenerator().getListaTercetos().add(Aux2);new IntermediateCodeGenerator().getPila().push(Aux.getNroTerceto());:};
 
-elemento::=IDENTIFIER:id{: System.out.println("Identificador: " + id);new IntermediateCodeGenerator().getListaTercetos().add(new Terceto(id.toString(),"","")); :};
-elemento::=INTEGER_CONSTANT:constant{: System.out.println("Entero: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),""));new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("_"+constant.toString(),"",""));:};
-elemento::=FLOAT_CONSTANT:constant{: System.out.println("Flotante: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_FLOAT",constant.toString(),""));new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("_"+constant.toString(),"",""));:};
-elemento::=STRING_CONSTANT:constant{: System.out.println("Cadena: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_STRING",constant.toString(),constant.toString())); new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("_"+constant.toString(),"",""));:};
+elemento::=IDENTIFIER:id{: System.out.println("Identificador: " + id);new IntermediateCodeGenerator().getListaTercetos().add(new Terceto(id.toString(),"","")); Terceto A = new Terceto(id.toString(),"","") ;new IntermediateCodeGenerator().getListaTercetos().add(A); new IntermediateCodeGenerator().getP().setIndiceElemento(A.getNroTerceto());:};
+elemento::=INTEGER_CONSTANT:constant{: System.out.println("Entero: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),""));new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("_"+constant.toString(),"",""));Terceto A = new Terceto("_"+constant.toString(),"","") ;new IntermediateCodeGenerator().getListaTercetos().add(A); new IntermediateCodeGenerator().getP().setIndiceElemento(A.getNroTerceto());:};
+elemento::=FLOAT_CONSTANT:constant{: System.out.println("Flotante: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_FLOAT",constant.toString(),""));new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("_"+constant.toString(),"",""));Terceto A = new Terceto("_"+constant.toString(),"","") ;new IntermediateCodeGenerator().getListaTercetos().add(A); new IntermediateCodeGenerator().getP().setIndiceElemento(A.getNroTerceto());:};
+elemento::=STRING_CONSTANT:constant{: System.out.println("Cadena: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_STRING",constant.toString(),constant.toString()));Terceto Aux = new Terceto("_"+constant.toString(),"","") ;new IntermediateCodeGenerator().getListaTercetos().add(Aux); new IntermediateCodeGenerator().getP().setIndiceElemento(Aux.getNroTerceto());:};
