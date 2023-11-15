@@ -1,17 +1,19 @@
 package lyc.compiler.files;
 
 public class Punteros {
-    static int indiceElemento;
-    static int indiceLista;
-    static int indiceFirstIndexOf;
-    static int indiceTimer;
-    static int indiceWrite;
-    static int indiceRead;
-    static int indiceFactor;
-    static int indiceTermino;
-    static int indiceExpresion;
-    static int indiceAsignacion;
-    static int indiceComparador;
+    static int indiceElemento=0;
+    static int indiceLista=0;
+    static int indiceFirstIndexOf=0;
+    static int indiceTimer=0;
+    static int indiceWrite=0;
+    static int indiceRead=0;
+    static int indiceFactor=0;
+    static int indiceTermino=0;
+    static int indiceExpresion=0;
+    static int indiceAsignacion=0;
+    static int indiceComparador=0;
+    static int auxiliar1=0;
+    static int auxiliar2=0;
 
     public int indiceComparacion;
 
@@ -36,6 +38,24 @@ public class Punteros {
     public int indiceDeclaracion;
 
     public int indicePrincipio;
+
+    public int getAuxiliar1() {
+        return auxiliar1;
+    }
+
+    public void setAuxiliar1(int auxiliar) {
+        this.auxiliar1 = auxiliar;
+    }
+
+    public int getAuxiliar2() {
+        return auxiliar2;
+    }
+
+    public void setAuxiliar2(int auxiliar) {
+        this.auxiliar2 = auxiliar;
+    }
+
+
 
     public int getIndiceElemento() {
         return indiceElemento;

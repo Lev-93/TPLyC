@@ -140,7 +140,7 @@ factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id);Terceto fAux= new T
 factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),""));Terceto Aux = new Terceto("_"+constant.toString(),"","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new Punteros().setIndiceFactor(Aux.getNroTerceto());:};
 factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant: " + constant ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_FLOAT",constant.toString(),""));Terceto Aux = new Terceto("_"+constant.toString(),"","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new Punteros().setIndiceFactor(Aux.getNroTerceto());:};
 
-factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
+factor ::= OPEN_BRACKET {:new Punteros().setAuxiliar1((new Punteros().getIndiceTermino()));new Punteros().setAuxiliar2((new Punteros().getIndiceExpresion()));:} expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); new Punteros().setIndiceFactor((new Punteros().getIndiceExpresion()));new Punteros().setIndiceTermino((new Punteros().getAuxiliar1()));new Punteros().setIndiceExpresion((new Punteros().getAuxiliar2())); :};
 
 
 read ::= READ OPEN_BRACKET IDENTIFIER:id  CLOSE_BRACKET {: System.out.println("read(base) *-base es una variable-*");Terceto Aux = new Terceto("=",id.toString(),"READ");new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
