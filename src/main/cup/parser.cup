@@ -117,7 +117,7 @@ condicion ::= condicion OR comparacion {: System.out.println("OR"); :};
 condicion ::= condicion AND comparacion {: System.out.println("AND"); :};
 condicion ::= comparacion {: System.out.println("Condicion"); :};
 
-comparacion ::= expression comparador {: Terceto Aux = new Terceto(""+(new Punteros().getIndiceComparador()),""+(new Punteros().getIndiceExpresion()),"");new Punteros().setIndiceComparacion(Aux.getNroTerceto());;new IntermediateCodeGenerator().getListaTercetos().add(Aux); :} expression {: System.out.println("Comparacion");new IntermediateCodeGenerator().modificarTerceto(new Punteros().getIndiceComparacion(),""+new Punteros().getIndiceExpresion(),3);:};
+comparacion ::= expression comparador {: new Punteros().setAuxiliar1((new Punteros().getIndiceExpresion())); :} expression {: System.out.println("Comparacion");Terceto Aux = new Terceto(""+(new Punteros().getIndiceComparador()),""+(new Punteros().getAuxiliar1()),""+(new Punteros().getIndiceExpresion()));new Punteros().setIndiceComparacion(Aux.getNroTerceto());;new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
 
 comparador ::= MAYOROIGUAL {: System.out.println(">=");Terceto Aux = new Terceto(">=","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
 comparador ::= MAYOR {: System.out.println(">");Terceto Aux = new Terceto(">","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
