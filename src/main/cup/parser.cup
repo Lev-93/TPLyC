@@ -119,11 +119,11 @@ condicion ::= comparacion {: System.out.println("Condicion"); :};
 
 comparacion ::= expression comparador {: new Punteros().setAuxiliar1((new Punteros().getIndiceExpresion())); :} expression {: System.out.println("Comparacion");Terceto Aux = new Terceto(""+(new Punteros().getIndiceComparador()),""+(new Punteros().getAuxiliar1()),""+(new Punteros().getIndiceExpresion()));new Punteros().setIndiceComparacion(Aux.getNroTerceto());;new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
 
-comparador ::= MAYOROIGUAL {: System.out.println(">=");Terceto Aux = new Terceto(">=","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
-comparador ::= MAYOR {: System.out.println(">");Terceto Aux = new Terceto(">","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
-comparador ::= IGUAL {: System.out.println("=");Terceto Aux = new Terceto("==","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
-comparador ::= MENOROIGUAL {: System.out.println("<=");Terceto Aux = new Terceto("<=","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
-comparador ::= MENOR {: System.out.println("<");Terceto Aux = new Terceto("<","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
+comparador ::= MAYOROIGUAL {: System.out.println(">=");Terceto Aux = new Terceto("BLT","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
+comparador ::= MAYOR {: System.out.println(">");Terceto Aux = new Terceto("BLE","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
+comparador ::= IGUAL {: System.out.println("=");Terceto Aux = new Terceto("BNE","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
+comparador ::= MENOROIGUAL {: System.out.println("<=");Terceto Aux = new Terceto("BGT","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
+comparador ::= MENOR {: System.out.println("<");Terceto Aux = new Terceto("BGE","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
 
 assignment ::= IDENTIFIER:id ASSIG expression {: System.out.println("Asignacion"); Terceto Aux = new Terceto("=",id.toString(),""+(new Punteros().getIndiceExpresion()));new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
 
