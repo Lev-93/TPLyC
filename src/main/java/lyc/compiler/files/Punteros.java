@@ -19,7 +19,7 @@ public class Punteros {
     static int indiceSeleccion=0;
     static int indiceIteracion=0;
     static int indiceSentencia=0;
-    static int indicePrograma=0;
+    static int indicePrograma=1;
     static int indiceProgramaSentencia=0;
     static int indiceListaCadena=0;
     static int indiceListaFlotante=0;

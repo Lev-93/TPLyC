@@ -12,16 +12,25 @@ public class SymbolTableGenerator implements FileGenerator{
     @Override
     public void generate(FileWriter fileWriter) throws IOException {
 
-        LinkedHashSet<Simbolo> set = new LinkedHashSet<Simbolo>(tablaSimbolos);
-        tablaSimbolos.clear();
-        tablaSimbolos.addAll(set);
-        fileWriter.write("NOMBRE|TIPODATO|VALOR|LONGITUD\n");
+        ArrayList<String> aux = new ArrayList<String>();
         for (Simbolo s:tablaSimbolos) {
-            fileWriter.write(s.toString() + "\n");
+            String cadena = s.toString();
+            if(!aux.contains(cadena)) {
+                System.out.println(cadena); //solo para prueba
+                aux.add(cadena);
+            }
+        }
+
+        fileWriter.write("NOMBRE|TIPODATO|VALOR|LONGITUD\n");
+        for (String s:aux) {
+            fileWriter.write(s + "\n");
         }
     }
+
+
 
     public ArrayList<Simbolo> getTablaSimbolos() {
         return tablaSimbolos;
     }
+
 }
