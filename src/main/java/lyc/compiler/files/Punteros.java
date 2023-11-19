@@ -12,8 +12,6 @@ public class Punteros {
     static int indiceExpresion=0;
     static int indiceAsignacion=0;
     static int indiceComparador=0;
-    static int auxiliar1=0;
-    static int auxiliar2=0;
     static int indiceComparacion=0;
     static int indiceCondicion=0;
     static int indiceSeleccion=0;
@@ -27,6 +25,19 @@ public class Punteros {
     static int indiceVariableIniciada=0;
     static int indiceDeclaracion=0;
     static int indicePrincipio=0;
+
+    static int auxiliar1=0;
+    static int auxiliar2=0;
+    static int auxiliarAnd=0;
+    static int auxiliarWhile=0;
+    static int auxiliarOr=0;
+    public static int getAuxiliarOr() {
+        return auxiliarOr;
+    }
+
+    public static void setAuxiliarOr(int auxiliarOr) {
+        Punteros.auxiliarOr = auxiliarOr;
+    }
 
 
     public static int getAuxiliarAnd() {
@@ -45,8 +56,6 @@ public class Punteros {
         Punteros.auxiliarWhile = auxiliarWhile;
     }
 
-    static int auxiliarAnd=0;
-    static int auxiliarWhile=0;
     public static int getIndiceProgramaSentencia() {return indiceProgramaSentencia;}
 
     public static void setIndiceProgramaSentencia(int indiceProgramaSentencia) {Punteros.indiceProgramaSentencia = indiceProgramaSentencia;}
