@@ -3,7 +3,7 @@ package lyc.compiler.files;
 public class Punteros {
     static int indiceElemento=0;
     static int indiceLista=0;
-    static int indiceFirstIndexOf=0;
+    static int indiceFirstIndex=0;
     static int indiceTimer=0;
     static int indiceWrite=0;
     static int indiceRead=0;
@@ -11,7 +11,6 @@ public class Punteros {
     static int indiceTermino=0;
     static int indiceExpresion=0;
     static int indiceAsignacion=0;
-    static int indiceFirstIndex=0;
     static int indiceComparador=0;
     static int auxiliar1=0;
     static int auxiliar2=0;
@@ -21,6 +20,7 @@ public class Punteros {
     static int indiceIteracion=0;
     static int indiceSentencia=0;
     static int indicePrograma=0;
+    static int indiceProgramaSentencia=0;
     static int indiceListaCadena=0;
     static int indiceListaFlotante=0;
     static int indiceListaEntero=0;
@@ -29,13 +29,31 @@ public class Punteros {
     static int indicePrincipio=0;
 
 
-    public static int getIndiceFirstIndex() {
-        return indiceFirstIndex;
+    public static int getAuxiliarAnd() {
+        return auxiliarAnd;
     }
 
-    public static void setIndiceFirstIndex(int indiceFirstIndex) {
-        Punteros.indiceFirstIndex = indiceFirstIndex;
+    public static void setAuxiliarAnd(int auxiliarAnd) {
+        Punteros.auxiliarAnd = auxiliarAnd;
     }
+
+    public static int getAuxiliarWhile() {
+        return auxiliarWhile;
+    }
+
+    public static void setAuxiliarWhile(int auxiliarWhile) {
+        Punteros.auxiliarWhile = auxiliarWhile;
+    }
+
+    static int auxiliarAnd=0;
+    static int auxiliarWhile=0;
+    public static int getIndiceProgramaSentencia() {return indiceProgramaSentencia;}
+
+    public static void setIndiceProgramaSentencia(int indiceProgramaSentencia) {Punteros.indiceProgramaSentencia = indiceProgramaSentencia;}
+
+    public static int getIndiceFirstIndex() {return indiceFirstIndex;}
+
+    public static void setIndiceFirstIndex(int indiceFirstIndex) {Punteros.indiceFirstIndex = indiceFirstIndex;}
 
     public int getAuxiliar1() {
         return auxiliar1;
@@ -53,8 +71,6 @@ public class Punteros {
         this.auxiliar2 = auxiliar;
     }
 
-
-
     public int getIndiceElemento() {
         return indiceElemento;
     }
@@ -69,14 +85,6 @@ public class Punteros {
 
     public void setIndiceLista(int indiceLista) {
         this.indiceLista = indiceLista;
-    }
-
-    public int getIndiceFirstIndexOf() {
-        return indiceFirstIndexOf;
-    }
-
-    public void setIndiceFirstIndexOf(int indiceFirstIndexOf) {
-        this.indiceFirstIndexOf = indiceFirstIndexOf;
     }
 
     public int getIndiceTimer() {

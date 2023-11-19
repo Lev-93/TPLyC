@@ -95,7 +95,7 @@ listaFlotante ::= IDENTIFIER:id  {: System.out.println("Variable Flotante: " + i
 listaCadena ::= listaCadena COMA IDENTIFIER:id {: System.out.println("Cadena:" + id );new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"string","","")); :};
 listaCadena ::= IDENTIFIER:id  {: System.out.println("Cadena:" + id);new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"string","","")); :};
 
-programa ::= programa sentence {: System.out.println("Programa Sentencia"); :};
+programa ::= programa sentence {: System.out.println("Programa Sentencia");new Punteros().setIndicePrograma(new Punteros().getIndiceSentencia()); :};
 programa ::= sentence {: System.out.println("Sentencia");new Punteros().setIndicePrograma(new Punteros().getIndiceSentencia());:};
 
 sentence ::= iteracion {:System.out.println("Sentencia");new Punteros().setIndiceSentencia(new Punteros().getIndiceIteracion());:};
@@ -106,16 +106,16 @@ sentence ::= timer {: System.out.println("Sentencia"); new Punteros().setIndiceS
 sentence ::= read{: System.out.println("Sentencia"); new Punteros().setIndiceSentencia(new Punteros().getIndiceRead());:};
 sentence ::= write{:System.out.println("Sentencia"); new Punteros().setIndiceSentencia(new Punteros().getIndiceWrite());:};
 
-iteracion ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("iteracion"); :};
+iteracion ::= WHILE OPEN_BRACKET {:new Punteros().setAuxiliarWhile(new Punteros().getIndicePrograma());:} condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("iteracion");new IntermediateCodeGenerator().modificarTerceto(new Punteros().getIndiceCondicion(),"" + (new Punteros().getIndicePrograma()+1),2);new Punteros().setIndiceSeleccion(new Punteros().getIndiceCondicion());System.out.println("ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +(new IntermediateCodeGenerator().getListaTercetos().get(new Punteros().getIndiceCondicion())).toString());Terceto Aux = new Terceto("BI","" + new Punteros().getAuxiliarWhile(),""); new IntermediateCodeGenerator().getListaTercetos().add(Aux); :};
 
-seleccion ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion simple");new IntermediateCodeGenerator().modificarTerceto(new Punteros().getIndiceCondicion(),"" + new Punteros().getIndicePrograma(),2);  new Punteros().setIndiceSeleccion(new Punteros().getIndiceCondicion());:};
-seleccion ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE ELSE OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion con else");new IntermediateCodeGenerator().modificarTerceto(new Punteros().getIndiceCondicion(),"" + new Punteros().getIndicePrograma(),2);new Punteros().setIndiceSeleccion(new Punteros().getIndiceCondicion());:};
+seleccion ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion simple");new IntermediateCodeGenerator().modificarTerceto(new Punteros().getIndiceCondicion(),"" + (new Punteros().getIndicePrograma()+1),2);  new Punteros().setIndiceSeleccion(new Punteros().getIndiceCondicion());System.out.println("ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +(new IntermediateCodeGenerator().getListaTercetos().get(new Punteros().getIndiceCondicion())).toString());:};
+seleccion ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE ELSE OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion con else");new IntermediateCodeGenerator().modificarTerceto(new Punteros().getIndiceCondicion(),"" + (new Punteros().getIndicePrograma()+1),2);new Punteros().setIndiceSeleccion(new Punteros().getIndiceCondicion());System.out.println("ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +(new IntermediateCodeGenerator().getListaTercetos().get(new Punteros().getIndiceCondicion())).toString());:};
 
 
 condicion ::= NOT comparacion {: System.out.println("Condicion negada"); :};//Invertir Condicion de salto
 condicion ::= condicion OR{::} comparacion {: System.out.println("OR"); :};//Invertir Condicion de salto solo 1 parentesis al then
-condicion ::= condicion AND comparacion {: System.out.println("AND"); :};
-condicion ::= comparacion {: System.out.println("Condicion"); Terceto Aux = new Terceto(""+new IntermediateCodeGenerator().getPila().pop(),"","");new Punteros().setIndiceCondicion(Aux.getNroTerceto());new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
+condicion ::= condicion {:new Punteros().setAuxiliarAnd(new Punteros().getIndiceCondicion());:} AND comparacion {: System.out.println("AND"); Terceto Aux = new Terceto(""+new IntermediateCodeGenerator().getPila().pop(),"","");new Punteros().setIndiceCondicion(Aux.getNroTerceto()-1);new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
+condicion ::= comparacion {: System.out.println("Condicion"); Terceto Aux = new Terceto(""+new IntermediateCodeGenerator().getPila().pop(),"","");new Punteros().setIndiceCondicion(Aux.getNroTerceto()-1);new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
 
 comparacion ::= expression comparador {: new Punteros().setAuxiliar1((new Punteros().getIndiceExpresion())); :} expression {: System.out.println("Comparacion");Terceto Aux = new Terceto("CMP",""+(new Punteros().getAuxiliar1()),""+(new Punteros().getIndiceExpresion()));new Punteros().setIndiceComparacion(Aux.getNroTerceto());new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
 
