@@ -11,33 +11,31 @@ public class Punteros {
     static int indiceTermino=0;
     static int indiceExpresion=0;
     static int indiceAsignacion=0;
+    static int indiceFirstIndex=0;
     static int indiceComparador=0;
     static int auxiliar1=0;
     static int auxiliar2=0;
+    static int indiceComparacion=0;
+    static int indiceCondicion=0;
+    static int indiceSeleccion=0;
+    static int indiceIteracion=0;
+    static int indiceSentencia=0;
+    static int indicePrograma=0;
+    static int indiceListaCadena=0;
+    static int indiceListaFlotante=0;
+    static int indiceListaEntero=0;
+    static int indiceVariableIniciada=0;
+    static int indiceDeclaracion=0;
+    static int indicePrincipio=0;
 
-    public int indiceComparacion;
 
-    public int indiceCondicion;
+    public static int getIndiceFirstIndex() {
+        return indiceFirstIndex;
+    }
 
-    public int indiceSeleccion;
-
-    public int indiceIteracion;
-
-    public int indiceSentencia;
-
-    public int indicePrograma;
-
-    public int indiceListaCadena;
-
-    public int indiceListaFlotante;
-
-    public int indiceListaEntero;
-
-    public int indiceVariableIniciada;
-
-    public int indiceDeclaracion;
-
-    public int indicePrincipio;
+    public static void setIndiceFirstIndex(int indiceFirstIndex) {
+        Punteros.indiceFirstIndex = indiceFirstIndex;
+    }
 
     public int getAuxiliar1() {
         return auxiliar1;

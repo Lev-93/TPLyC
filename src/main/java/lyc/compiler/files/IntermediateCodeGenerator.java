@@ -8,9 +8,8 @@ import java.util.Stack;
 
 public class IntermediateCodeGenerator implements FileGenerator {
 
-    private static Punteros p = new Punteros();
     private static ArrayList<Terceto> listaTercetos= new ArrayList<Terceto>();
-    private static Stack<Integer> pila = new Stack<Integer>();
+    private static Stack<String> pila = new Stack<String>();
     @Override
     public void generate(FileWriter fileWriter) throws IOException {
         for (Terceto t:listaTercetos) {
@@ -43,14 +42,8 @@ public class IntermediateCodeGenerator implements FileGenerator {
                 break;
         }
     }
-    public static Stack<Integer> getPila() {
+    public static Stack<String> getPila() {
         return pila;
     }
 
-    public static Punteros getP() {
-        return p;
-    }
-    public static void setP(Punteros p) {
-        IntermediateCodeGenerator.p = p;
-    }
 }

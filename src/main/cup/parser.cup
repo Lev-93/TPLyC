@@ -96,36 +96,36 @@ listaCadena ::= listaCadena COMA IDENTIFIER:id {: System.out.println("Cadena:" +
 listaCadena ::= IDENTIFIER:id  {: System.out.println("Cadena:" + id);new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"string","","")); :};
 
 programa ::= programa sentence {: System.out.println("Programa Sentencia"); :};
-programa ::= sentence {: System.out.println("Sentencia");:};
+programa ::= sentence {: System.out.println("Sentencia");new Punteros().setIndicePrograma(new Punteros().getIndiceSentencia());:};
 
-sentence ::= iteracion {:System.out.println("Sentencia");:};
-sentence ::= seleccion {:System.out.println("Sentencia"); :};
-sentence ::= assignment {:System.out.println("Sentencia");  :};
-sentence ::= firstindexof{: System.out.println("Sentencia"); :};
-sentence ::= timer {: System.out.println("Sentencia"); :};
-sentence ::= read{: System.out.println("Sentencia"); :};
-sentence ::= write{:System.out.println("Sentencia"); :};
+sentence ::= iteracion {:System.out.println("Sentencia");new Punteros().setIndiceSentencia(new Punteros().getIndiceIteracion());:};
+sentence ::= seleccion {:System.out.println("Sentencia"); new Punteros().setIndiceSentencia(new Punteros().getIndiceSeleccion());:};
+sentence ::= assignment {:System.out.println("Sentencia");  new Punteros().setIndiceSentencia(new Punteros().getIndiceAsignacion());:};
+sentence ::= firstindexof{: System.out.println("Sentencia"); new Punteros().setIndiceSentencia(new Punteros().getIndiceFirstIndex());:};
+sentence ::= timer {: System.out.println("Sentencia"); new Punteros().setIndiceSentencia(new Punteros().getIndiceTimer());:};
+sentence ::= read{: System.out.println("Sentencia"); new Punteros().setIndiceSentencia(new Punteros().getIndiceRead());:};
+sentence ::= write{:System.out.println("Sentencia"); new Punteros().setIndiceSentencia(new Punteros().getIndiceWrite());:};
 
 iteracion ::= WHILE OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("iteracion"); :};
 
-seleccion ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion simple"); :};
-seleccion ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE ELSE OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion con else"); :};
+seleccion ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion simple");new IntermediateCodeGenerator().modificarTerceto(new Punteros().getIndiceCondicion(),"" + new Punteros().getIndicePrograma(),2);  new Punteros().setIndiceSeleccion(new Punteros().getIndiceCondicion());:};
+seleccion ::= IF OPEN_BRACKET condicion CLOSE_BRACKET OPEN_LLAVE programa CLOSE_LLAVE ELSE OPEN_LLAVE programa CLOSE_LLAVE {: System.out.println("Seleccion con else");new IntermediateCodeGenerator().modificarTerceto(new Punteros().getIndiceCondicion(),"" + new Punteros().getIndicePrograma(),2);new Punteros().setIndiceSeleccion(new Punteros().getIndiceCondicion());:};
 
 
-condicion ::= NOT comparacion {: System.out.println("Condicion negada"); :};
-condicion ::= condicion OR comparacion {: System.out.println("OR"); :};
+condicion ::= NOT comparacion {: System.out.println("Condicion negada"); :};//Invertir Condicion de salto
+condicion ::= condicion OR{::} comparacion {: System.out.println("OR"); :};//Invertir Condicion de salto solo 1 parentesis al then
 condicion ::= condicion AND comparacion {: System.out.println("AND"); :};
-condicion ::= comparacion {: System.out.println("Condicion"); :};
+condicion ::= comparacion {: System.out.println("Condicion"); Terceto Aux = new Terceto(""+new IntermediateCodeGenerator().getPila().pop(),"","");new Punteros().setIndiceCondicion(Aux.getNroTerceto());new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
 
-comparacion ::= expression comparador {: new Punteros().setAuxiliar1((new Punteros().getIndiceExpresion())); :} expression {: System.out.println("Comparacion");Terceto Aux = new Terceto(""+(new Punteros().getIndiceComparador()),""+(new Punteros().getAuxiliar1()),""+(new Punteros().getIndiceExpresion()));new Punteros().setIndiceComparacion(Aux.getNroTerceto());;new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
+comparacion ::= expression comparador {: new Punteros().setAuxiliar1((new Punteros().getIndiceExpresion())); :} expression {: System.out.println("Comparacion");Terceto Aux = new Terceto("CMP",""+(new Punteros().getAuxiliar1()),""+(new Punteros().getIndiceExpresion()));new Punteros().setIndiceComparacion(Aux.getNroTerceto());new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
 
-comparador ::= MAYOROIGUAL {: System.out.println(">=");Terceto Aux = new Terceto("BLT","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
-comparador ::= MAYOR {: System.out.println(">");Terceto Aux = new Terceto("BLE","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
-comparador ::= IGUAL {: System.out.println("=");Terceto Aux = new Terceto("BNE","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
-comparador ::= MENOROIGUAL {: System.out.println("<=");Terceto Aux = new Terceto("BGT","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
-comparador ::= MENOR {: System.out.println("<");Terceto Aux = new Terceto("BGE","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new IntermediateCodeGenerator().getP().setIndiceComparador(Aux.getNroTerceto()); :};
+comparador ::= MAYOROIGUAL {: System.out.println(">=");new IntermediateCodeGenerator().getPila().push("BLT");; :};
+comparador ::= MAYOR {: System.out.println(">");new IntermediateCodeGenerator().getPila().push("BLE"); :};
+comparador ::= IGUAL {: System.out.println("==");new IntermediateCodeGenerator().getPila().push("BNE"); :};
+comparador ::= MENOROIGUAL {: System.out.println("<=");new IntermediateCodeGenerator().getPila().push("BGT"); :};
+comparador ::= MENOR {: System.out.println("<");new IntermediateCodeGenerator().getPila().push("BGE"); :};
 
-assignment ::= IDENTIFIER:id ASSIG expression {: System.out.println("Asignacion"); Terceto Aux = new Terceto("=",id.toString(),""+(new Punteros().getIndiceExpresion()));new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
+assignment ::= IDENTIFIER:id ASSIG expression {: System.out.println("Asignacion"); Terceto Aux = new Terceto("=",id.toString(),""+(new Punteros().getIndiceExpresion()));new IntermediateCodeGenerator().getListaTercetos().add(Aux);new Punteros().setIndiceAsignacion(Aux.getNroTerceto());:};
 
 expression ::= expression PLUS term {: System.out.println("+"); Terceto Aux = new Terceto("+",""+(new Punteros().getIndiceExpresion()), ""+(new Punteros().getIndiceTermino())); new IntermediateCodeGenerator().getListaTercetos().add(Aux); new Punteros().setIndiceExpresion(Aux.getNroTerceto()); :};
 expression ::= expression SUB term {: System.out.println("-"); Terceto Aux = new Terceto("-",""+(new Punteros().getIndiceExpresion()), ""+(new Punteros().getIndiceTermino())); new IntermediateCodeGenerator().getListaTercetos().add(Aux); new Punteros().setIndiceExpresion(Aux.getNroTerceto()); :};
@@ -143,7 +143,7 @@ factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant: " + constant
 factor ::= OPEN_BRACKET {:new Punteros().setAuxiliar1((new Punteros().getIndiceTermino()));new Punteros().setAuxiliar2((new Punteros().getIndiceExpresion()));:} expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); new Punteros().setIndiceFactor((new Punteros().getIndiceExpresion()));new Punteros().setIndiceTermino((new Punteros().getAuxiliar1()));new Punteros().setIndiceExpresion((new Punteros().getAuxiliar2())); :};
 
 
-read ::= READ OPEN_BRACKET IDENTIFIER:id  CLOSE_BRACKET {: System.out.println("read(base) *-base es una variable-*");Terceto Aux = new Terceto("=",id.toString(),"READ");new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
+read ::= READ OPEN_BRACKET IDENTIFIER:id  CLOSE_BRACKET {: System.out.println("read(base) *-base es una variable-*");Terceto Aux = new Terceto("=",id.toString(),"READ");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new Punteros().setIndiceRead(Aux.getNroTerceto());:};
 
 write ::= WRITE OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET{: System.out.println(" *- var1 es una variable numérica definida previamente -*");Terceto Aux= new Terceto("WRITE","_"+id.toString(),"");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new Punteros().setIndiceWrite(Aux.getNroTerceto());:};
 write ::= WRITE OPEN_BRACKET STRING_CONSTANT:constant CLOSE_BRACKET{: System.out.println( "Write(STRING) Constant: " + constant );  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_STRING",constant.toString(),constant.toString()));Terceto Aux= new Terceto("WRITE",""+constant.toString(),"");new IntermediateCodeGenerator().getListaTercetos().add(Aux);new Punteros().setIndiceWrite(Aux.getNroTerceto());:};
@@ -151,12 +151,11 @@ write ::= WRITE OPEN_BRACKET STRING_CONSTANT:constant CLOSE_BRACKET{: System.out
 timer ::= TIMER OPEN_BRACKET INTEGER_CONSTANT:constant COMA write CLOSE_BRACKET{: System.out.println("Timer: " + constant);new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),"")); Terceto Aux = new Terceto("TIMER","_"+constant.toString(),""+(new Punteros().getIndiceWrite()));new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
 
 
-firstindexof ::= FIRSTINDEXOF OPEN_BRACKET IDENTIFIER:id PYC OPEN_CORCHETE{:Terceto Aux = new Terceto("=","@aux",id.toString());new IntermediateCodeGenerator().getListaTercetos().add(Aux);:} lista CLOSE_CORCHETE CLOSE_BRACKET {: System.out.println("FirstIndexOf: Elemento a buscar" + id + "[Lista]");:};
+firstindexof ::= FIRSTINDEXOF OPEN_BRACKET IDENTIFIER:id PYC OPEN_CORCHETE{:Terceto Aux = new Terceto("=","@aux",id.toString());new IntermediateCodeGenerator().getListaTercetos().add(Aux);:} lista CLOSE_CORCHETE CLOSE_BRACKET {: System.out.println("FirstIndexOf: Elemento a buscar" + id + "[Lista]");Terceto Aux = new Terceto("RESUL","","");new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
 
-lista::= lista COMA elemento{: System.out.println("Lista , elemento");Terceto Aux = new Terceto("CMP","@aux",""+(new Punteros().getIndiceElemento()));new IntermediateCodeGenerator().getListaTercetos().add(Aux);Terceto Aux2 = new Terceto("BNE",""+(Aux.getNroTerceto()+4),"");new IntermediateCodeGenerator().getListaTercetos().add(Aux2);new IntermediateCodeGenerator().getPila().push(Aux2.getNroTerceto()); :};
-lista::= elemento{: System.out.println("Elemento"); Terceto Aux = new Terceto("CMP","@aux",""+(new Punteros().getIndiceElemento()));new IntermediateCodeGenerator().getListaTercetos().add(Aux);Terceto Aux2 = new Terceto("BNE",""+(Aux.getNroTerceto()+4),"");new IntermediateCodeGenerator().getListaTercetos().add(Aux2);new IntermediateCodeGenerator().getPila().push(Aux.getNroTerceto());:};
+lista::= lista COMA elemento{: System.out.println("Lista , elemento");Terceto Aux = new Terceto("CMP","@aux",""+(new Punteros().getIndiceElemento()));new IntermediateCodeGenerator().getListaTercetos().add(Aux);Terceto Aux2 = new Terceto("BNE",""+(Aux.getNroTerceto()+3),"");new IntermediateCodeGenerator().getListaTercetos().add(Aux2); :};
+lista::= elemento{: System.out.println("Elemento"); Terceto Aux = new Terceto("CMP","@aux",""+(new Punteros().getIndiceElemento()));new IntermediateCodeGenerator().getListaTercetos().add(Aux);Terceto Aux2 = new Terceto("BNE",""+(Aux.getNroTerceto()+3),"");new IntermediateCodeGenerator().getListaTercetos().add(Aux2);:};
 
 elemento::=IDENTIFIER:id{: System.out.println("Identificador: " + id);new IntermediateCodeGenerator().getListaTercetos().add(new Terceto(id.toString(),"","")); Terceto Aux = new Terceto(id.toString(),"","") ;new IntermediateCodeGenerator().getListaTercetos().add(Aux);new Punteros().setIndiceElemento(Aux.getNroTerceto());:};
-elemento::=INTEGER_CONSTANT:constant{: System.out.println("Entero: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),""));new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("_"+constant.toString(),"",""));Terceto Aux = new Terceto("_"+constant.toString(),"","") ;new IntermediateCodeGenerator().getListaTercetos().add(Aux);new Punteros().setIndiceElemento(Aux.getNroTerceto());:};
-elemento::=FLOAT_CONSTANT:constant{: System.out.println("Flotante: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_FLOAT",constant.toString(),""));new IntermediateCodeGenerator().getListaTercetos().add(new Terceto("_"+constant.toString(),"",""));Terceto Aux = new Terceto("_"+constant.toString(),"","") ;new IntermediateCodeGenerator().getListaTercetos().add(Aux);new Punteros().setIndiceElemento(Aux.getNroTerceto());:};
-elemento::=STRING_CONSTANT:constant{: System.out.println("Cadena: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_STRING",constant.toString(),constant.toString()));Terceto Aux = new Terceto("_"+constant.toString(),"","") ;new IntermediateCodeGenerator().getListaTercetos().add(Aux);new Punteros().setIndiceElemento(Aux.getNroTerceto());:};
+elemento::=INTEGER_CONSTANT:constant{: System.out.println("Entero: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),""));Terceto Aux = new Terceto("_"+constant.toString(),"","") ;new IntermediateCodeGenerator().getListaTercetos().add(Aux);new Punteros().setIndiceElemento(Aux.getNroTerceto());:};
+elemento::=FLOAT_CONSTANT:constant{: System.out.println("Flotante: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_FLOAT",constant.toString(),""));Terceto Aux = new Terceto("_"+constant.toString(),"","") ;new IntermediateCodeGenerator().getListaTercetos().add(Aux);new Punteros().setIndiceElemento(Aux.getNroTerceto());:};
