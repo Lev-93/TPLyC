@@ -25,12 +25,23 @@ public class Punteros {
     static int indiceVariableIniciada=0;
     static int indiceDeclaracion=0;
     static int indicePrincipio=0;
+    static int indiceThen=0;
 
     static int auxiliar1=0;
     static int auxiliar2=0;
     static int auxiliarAnd=0;
     static int auxiliarWhile=0;
     static int auxiliarOr=0;
+
+
+    public static int getIndiceThen() {
+        return indiceThen;
+    }
+
+    public static void setIndiceThen(int indiceThen) {
+        Punteros.indiceThen = indiceThen;
+    }
+
     public static int getAuxiliarOr() {
         return auxiliarOr;
     }

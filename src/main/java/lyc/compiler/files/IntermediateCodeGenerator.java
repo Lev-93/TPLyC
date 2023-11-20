@@ -40,10 +40,27 @@ public class IntermediateCodeGenerator implements FileGenerator {
                 auxiliar.setOperador2(contenido);
                 listaTercetos.set(posicionLista,auxiliar);
                 break;
+
         }
     }
     public static Stack<String> getPila() {
         return pila;
     }
-
+    public String invertirSalto(Terceto Aux){
+        String salto=Aux.getOperando();
+        if(salto=="BLE"){
+            salto="BGT";
+        } else if (salto=="BNE") {
+            salto="BEQ";
+        }else if (salto=="BGE"){
+            salto="BLT";
+        } else if (salto=="BLT") {
+            salto="BGE";
+        } else if (salto=="BGT") {
+            salto="BLE";
+        } else if (salto=="BEQ") {
+            salto="BNE";
+        }
+        return salto;
+    }
 }
