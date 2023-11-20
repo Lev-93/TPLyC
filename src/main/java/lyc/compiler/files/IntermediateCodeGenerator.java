@@ -48,17 +48,17 @@ public class IntermediateCodeGenerator implements FileGenerator {
     }
     public String invertirSalto(Terceto Aux){
         String salto=Aux.getOperando();
-        if(salto=="BLE"){
+        if(salto.equals("BLE")){
             salto="BGT";
-        } else if (salto=="BNE") {
+        } else if (salto.equals("BNE")) {
             salto="BEQ";
-        }else if (salto=="BGE"){
+        }else if (salto.equals("BGE")){
             salto="BLT";
-        } else if (salto=="BLT") {
+        } else if (salto.equals("BLT")) {
             salto="BGE";
-        } else if (salto=="BGT") {
+        } else if (salto.equals("BGT")) {
             salto="BLE";
-        } else if (salto=="BEQ") {
+        } else if (salto.equals("BEQ")) {
             salto="BNE";
         }
         return salto;

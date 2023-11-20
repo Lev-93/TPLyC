@@ -18,7 +18,7 @@ b=5
 else{
 b=3
 }
-while(a<b and c==b){
+while(a<b or c==b){
 a=a+1
 }
 write("Ingrese cadena:")
