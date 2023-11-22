@@ -11,27 +11,26 @@ public class SymbolTableGenerator implements FileGenerator{
 
     @Override
     public void generate(FileWriter fileWriter) throws IOException {
-        ArrayList<Simbolo> aux = getListaSimbolos();
-
+        getListaSimbolos();
         fileWriter.write("NOMBRE|TIPODATO|VALOR|LONGITUD|USO\n");
-        for (Simbolo s:aux) {
+        for (Simbolo s:tablaSimbolos) {
             fileWriter.write(s.toString() + "\n");
         }
     }
 
-    private static ArrayList<Simbolo> getListaSimbolos() {
+    private static void getListaSimbolos() {
         ArrayList<Simbolo> aux = new ArrayList<Simbolo>();
         ArrayList<String>  aux2 = new ArrayList<String>();
         for (Simbolo s:tablaSimbolos) {
             String cadena = s.getNombre();
             if(!aux2.contains(cadena) && validarID(aux2,cadena) ) {
-                System.out.println(cadena); //solo para prueba
+                if(cadena.charAt(0)=='_')
+                    s.setUso(true);
                 aux.add(s);
                 aux2.add(cadena);
             }
         }
         tablaSimbolos=aux;
-        return aux;
     }
 
         private static boolean validarID(ArrayList<String>  aux,String cadena){
