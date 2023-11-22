@@ -87,14 +87,14 @@ variableIniciada ::= INT listaEnteros {: System.out.println("Entero");:};
 variableIniciada ::= STRING listaCadena {: System.out.println("Cadena");:};
 variableIniciada ::= FLOAT listaFlotante {: System.out.println("Flotante"); :};
 
-listaEnteros ::= listaEnteros COMA IDENTIFIER:id {: System.out.println("Variable Entera: " + id ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"int","",""));:};
-listaEnteros ::= IDENTIFIER:id  {: System.out.println("Variable Entera: " + id); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"int","",""));:};
+listaEnteros ::= listaEnteros COMA IDENTIFIER:id {: System.out.println("Variable Entera: " + id ); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"int","?",""));:};
+listaEnteros ::= IDENTIFIER:id  {: System.out.println("Variable Entera: " + id); new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"int","?",""));:};
 
-listaFlotante ::= listaFlotante COMA IDENTIFIER:id {: System.out.println("Variable Flotante: " + id);new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"float","","")); :};
-listaFlotante ::= IDENTIFIER:id  {: System.out.println("Variable Flotante: " + id);new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"float","","")); :};
+listaFlotante ::= listaFlotante COMA IDENTIFIER:id {: System.out.println("Variable Flotante: " + id);new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"float","?","")); :};
+listaFlotante ::= IDENTIFIER:id  {: System.out.println("Variable Flotante: " + id);new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"float","?","")); :};
 
-listaCadena ::= listaCadena COMA IDENTIFIER:id {: System.out.println("Cadena:" + id );new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"string","","")); :};
-listaCadena ::= IDENTIFIER:id  {: System.out.println("Cadena:" + id);new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"string","","")); :};
+listaCadena ::= listaCadena COMA IDENTIFIER:id {: System.out.println("Cadena:" + id );new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"string","?","")); :};
+listaCadena ::= IDENTIFIER:id  {: System.out.println("Cadena:" + id);new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo(id.toString(),"string","?","")); :};
 
 programa ::= programa sentence {: System.out.println("Programa Sentencia");new Punteros().setIndicePrograma(new Punteros().getIndiceSentencia()); :};
 programa ::= sentence {: System.out.println("Sentencia");new Punteros().setIndicePrograma(new Punteros().getIndiceSentencia()); new Punteros().setAuxiliarThen(new Punteros().getIndiceSentencia()-1);:};
@@ -114,7 +114,7 @@ seleccion ::=  if {: System.out.println("Seleccion simple");new IntermediateCode
 seleccion ::= if ELSE {:new Punteros().setIndiceThen(new Punteros().getAuxiliarThen());Terceto Aux = new Terceto("BI","","");new Punteros().setIndiceElse(Aux.getNroTerceto()-1);new IntermediateCodeGenerator().getListaTercetos().add(Aux);:} OPEN_LLAVE programa CLOSE_LLAVE  {: System.out.println("Seleccion con else");new IntermediateCodeGenerator().modificarTerceto(new Punteros().getIndiceElse(),"" + (new Punteros().getIndicePrograma()+1),2);new Punteros().setIndiceSeleccion(new Punteros().getIndicePrograma()+1);new IntermediateCodeGenerator().modificarTerceto(new Punteros().getIndiceCondicion(),"" + (new Punteros().getIndiceElse()+2),2);new Punteros().setIndiceSeleccion(new Punteros().getIndicePrograma()+1);if(new Punteros().getAuxiliarAnd()!=0){new IntermediateCodeGenerator().modificarTerceto(new Punteros().getAuxiliarAnd(),"" + (new Punteros().getIndicePrograma()+1),2);new Punteros().setAuxiliarAnd(0);System.out.println("");}if(new Punteros().getAuxiliarOr()!=0){new IntermediateCodeGenerator().modificarTerceto((new Punteros().getAuxiliarOr()),"" + (new Punteros().getIndiceThen()),2);;new Punteros().setAuxiliarOr(0);System.out.println("");}:};
 
 
-condicion ::= NOT comparacion {: System.out.println("Condicion negada"); :};//Invertir Condicion de salto
+condicion ::= NOT comparacion {: System.out.println("Condicion negada");Terceto Aux = new Terceto(""+new IntermediateCodeGenerator().getPila().pop(),"","");new IntermediateCodeGenerator().invertirSalto(Aux);new Punteros().setIndiceCondicion(Aux.getNroTerceto()-1);new IntermediateCodeGenerator().getListaTercetos().add(Aux); :};//Invertir Condicion de salto
 condicion ::= condicion OR{:new Punteros().setAuxiliarOr(new Punteros().getIndiceCondicion());:} comparacion      {: System.out.println("OR") ; Terceto Aux = new Terceto(""+new IntermediateCodeGenerator().getPila().pop(),"","");new Punteros().setIndiceCondicion(Aux.getNroTerceto()-1);new IntermediateCodeGenerator().getListaTercetos().add(Aux);int orInd=new Punteros().getAuxiliarOr();Terceto muleto=new IntermediateCodeGenerator().getListaTercetos().get(orInd);String salto=new IntermediateCodeGenerator().invertirSalto(muleto); new IntermediateCodeGenerator().modificarTerceto(orInd,salto,1); :};//Invertir Condicion de salto solo 1 parentesis al then
 condicion ::= condicion AND{:new Punteros().setAuxiliarAnd(new Punteros().getIndiceComparacion());:}  comparacion {: System.out.println("AND"); Terceto Aux = new Terceto(""+new IntermediateCodeGenerator().getPila().pop(),"","");new Punteros().setIndiceCondicion(Aux.getNroTerceto()-1);new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
 condicion ::= comparacion {: System.out.println("Condicion"); Terceto Aux = new Terceto(""+new IntermediateCodeGenerator().getPila().pop(),"","");new Punteros().setIndiceCondicion(Aux.getNroTerceto()-1);new IntermediateCodeGenerator().getListaTercetos().add(Aux);:};
@@ -157,6 +157,7 @@ firstindexof ::= FIRSTINDEXOF OPEN_BRACKET IDENTIFIER:id PYC OPEN_CORCHETE{:Terc
 
 lista::= lista COMA elemento{: System.out.println("Lista , elemento");Terceto Aux = new Terceto("CMP","@aux",""+(new Punteros().getIndiceElemento()));new IntermediateCodeGenerator().getListaTercetos().add(Aux);Terceto Aux2 = new Terceto("BNE",""+(Aux.getNroTerceto()+3),"");new IntermediateCodeGenerator().getListaTercetos().add(Aux2); :};
 lista::= elemento{: System.out.println("Elemento"); Terceto Aux = new Terceto("CMP","@aux",""+(new Punteros().getIndiceElemento()));new IntermediateCodeGenerator().getListaTercetos().add(Aux);Terceto Aux2 = new Terceto("BNE",""+(Aux.getNroTerceto()+3),"");new IntermediateCodeGenerator().getListaTercetos().add(Aux2);:};
+
 
 elemento::=IDENTIFIER:id{: System.out.println("Identificador: " + id);new IntermediateCodeGenerator().getListaTercetos().add(new Terceto(id.toString(),"","")); Terceto Aux = new Terceto(id.toString(),"","") ;new IntermediateCodeGenerator().getListaTercetos().add(Aux);new Punteros().setIndiceElemento(Aux.getNroTerceto());:};
 elemento::=INTEGER_CONSTANT:constant{: System.out.println("Entero: " + constant);  new SymbolTableGenerator().getTablaSimbolos().add(new Simbolo("_"+constant.toString(),"CTE_INT",constant.toString(),""));Terceto Aux = new Terceto("_"+constant.toString(),"","") ;new IntermediateCodeGenerator().getListaTercetos().add(Aux);new Punteros().setIndiceElemento(Aux.getNroTerceto());:};

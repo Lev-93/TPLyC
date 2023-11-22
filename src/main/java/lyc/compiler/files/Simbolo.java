@@ -11,10 +11,15 @@ public class Simbolo{
     public String valor;
     public String longitud;
 
+
+
+    public boolean uso;
+
     public Simbolo(String nombre, String tipo, String valor, String longitud) {
         this.nombre = nombre;
         this.tipo = tipo;
         this.valor = valor.replaceAll("\"","");
+        this.uso=false;
         if(longitud.length()>0)
             this.longitud = (longitud.length()-2) + "";
         else
@@ -51,9 +56,15 @@ public class Simbolo{
     public void setLongitud(String longitud) {
         this.longitud = longitud;
     }
+    public boolean isUso() {
+        return uso;
+    }
 
+    public void setUso(boolean uso) {
+        this.uso = uso;
+    }
     @java.lang.Override
     public java.lang.String toString() {
-        return nombre +"|"+ tipo +"|"+ valor +"|"+ longitud;
+        return nombre +"|"+ tipo +"|"+ valor +"|"+ longitud + "|" + uso;
     }
 }

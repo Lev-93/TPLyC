@@ -78,7 +78,7 @@ WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
 IntegerConstant = {Digit}+
 
-CaracteresAdmitidos=@|\?|\"|\.|\,|\+|\t|\n|\/|\_|\:|\;|¿|\*|{Letter}|{Digit}
+CaracteresAdmitidos=@|\?|\"|\.|\,|\+|\t|\n|\:|\;|\*|{Letter}|{Digit}
 CualquierCaracter={CaracteresAdmitidos}|{WhiteSpace}
 Comentario =  "#""/"{CualquierCaracter}*"/""#"
 

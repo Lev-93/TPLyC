@@ -11,22 +11,36 @@ public class SymbolTableGenerator implements FileGenerator{
 
     @Override
     public void generate(FileWriter fileWriter) throws IOException {
+        ArrayList<Simbolo> aux = getListaSimbolos();
 
-        ArrayList<String> aux = new ArrayList<String>();
-        for (Simbolo s:tablaSimbolos) {
-            String cadena = s.toString();
-            if(!aux.contains(cadena)) {
-                System.out.println(cadena); //solo para prueba
-                aux.add(cadena);
-            }
-        }
-
-        fileWriter.write("NOMBRE|TIPODATO|VALOR|LONGITUD\n");
-        for (String s:aux) {
-            fileWriter.write(s + "\n");
+        fileWriter.write("NOMBRE|TIPODATO|VALOR|LONGITUD|USO\n");
+        for (Simbolo s:aux) {
+            fileWriter.write(s.toString() + "\n");
         }
     }
 
+    private static ArrayList<Simbolo> getListaSimbolos() {
+        ArrayList<Simbolo> aux = new ArrayList<Simbolo>();
+        ArrayList<String>  aux2 = new ArrayList<String>();
+        for (Simbolo s:tablaSimbolos) {
+            String cadena = s.getNombre();
+            if(!aux2.contains(cadena) && validarID(aux2,cadena) ) {
+                System.out.println(cadena); //solo para prueba
+                aux.add(s);
+                aux2.add(cadena);
+            }
+        }
+        tablaSimbolos=aux;
+        return aux;
+    }
+
+        private static boolean validarID(ArrayList<String>  aux,String cadena){
+            if(cadena.charAt(0)=='_') //Es cte no verifico
+                return true;
+            if(aux.contains(cadena))
+                throw new IllegalArgumentException("ID " + cadena +" duplicado ");
+            return true;
+        }
 
 
     public ArrayList<Simbolo> getTablaSimbolos() {

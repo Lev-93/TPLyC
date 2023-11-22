@@ -1,4 +1,4 @@
-init{#/ Este es un comentario con varios caracteres    *?+ /#
+init{#/ Este es un comentario con varios caracteres  /#
 int a,b,c,d,e
 float f
 string cadena
@@ -7,9 +7,6 @@ c=3
 a=1
 b=0
 if(a==1){
-if(a==1){
-b=1
-}
 b=3
 }
 if(a>b){
