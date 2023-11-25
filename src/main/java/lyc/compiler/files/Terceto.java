@@ -4,42 +4,42 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Terceto {
-    public String operando;
-    public String operador1;
-    public String operador2;
+    public String operador;
+    public String operando1;
+    public String operando2;
     public int nroTerceto;
     public static int cant = 1;
 
-    public Terceto(String operando, String operador1, String operador2) {
-        this.operando = operando;
-        this.operador1 = operador1;
-        this.operador2 = operador2;
+    public Terceto(String operador, String operando1, String operador2) {
+        this.operador = operador;
+        this.operando1 = operando1;
+        this.operando2 = operador2;
         this.nroTerceto = cant;
         cant++;
     }
 
-    public String getOperando() {
-        return operando;
+    public String getOperador() {
+        return operador;
     }
 
-    public void setOperando(String operando) {
-        this.operando = operando;
+    public void setOperador(String operador) {
+        this.operador = operador;
     }
 
-    public String getOperador1() {
-        return operador1;
+    public String getOperando1() {
+        return operando1;
     }
 
-    public void setOperador1(String operador1) {
-        this.operador1 = operador1;
+    public void setOperando1(String operando1) {
+        this.operando1 = operando1;
     }
 
-    public String getOperador2() {
-        return operador2;
+    public String getOperando2() {
+        return operando2;
     }
 
-    public void setOperador2(String operador2) {
-        this.operador2 = operador2;
+    public void setOperando2(String operando2) {
+        this.operando2 = operando2;
     }
 
     public int getNroTerceto() {
@@ -52,6 +52,6 @@ public class Terceto {
 
     @java.lang.Override
     public java.lang.String toString() {
-        return ""+ nroTerceto+"("+operando+";"+operador1+";"+operador2+")";
+        return ""+ nroTerceto+"("+ operador +";"+ operando1 +";"+ operando2 +")";
     }
 }

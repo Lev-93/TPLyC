@@ -25,19 +25,19 @@ public class IntermediateCodeGenerator implements FileGenerator {
         switch (posicionTerceto) {
             case 1:
                 auxiliar=listaTercetos.get(posicionLista);
-                auxiliar.setOperando(contenido);
+                auxiliar.setOperador(contenido);
                 listaTercetos.set(posicionLista,auxiliar);
                 break;
 
             case 2:
                 auxiliar=listaTercetos.get(posicionLista);
-                auxiliar.setOperador1(contenido);
+                auxiliar.setOperando1(contenido);
                 listaTercetos.set(posicionLista,auxiliar);
                 break;
 
             case 3:
                 auxiliar=listaTercetos.get(posicionLista);
-                auxiliar.setOperador2(contenido);
+                auxiliar.setOperando2(contenido);
                 listaTercetos.set(posicionLista,auxiliar);
                 break;
 
@@ -47,19 +47,19 @@ public class IntermediateCodeGenerator implements FileGenerator {
         return pila;
     }
     public String invertirSalto(Terceto Aux){
-        String salto=Aux.getOperando();
-        if(salto.equals("BLE")){
-            salto="BGT";
-        } else if (salto.equals("BNE")) {
-            salto="BEQ";
-        }else if (salto.equals("BGE")){
-            salto="BLT";
-        } else if (salto.equals("BLT")) {
-            salto="BGE";
-        } else if (salto.equals("BGT")) {
-            salto="BLE";
-        } else if (salto.equals("BEQ")) {
-            salto="BNE";
+        String salto=Aux.getOperador();
+        if(salto.equals("JBE")){
+            salto="JA";
+        } else if (salto.equals("JNE")) {
+            salto="JE";
+        }else if (salto.equals("JAE")){
+            salto="JB";
+        } else if (salto.equals("JB")) {
+            salto="JAE";
+        } else if (salto.equals("JA")) {
+            salto="JBE";
+        } else if (salto.equals("JE")) {
+            salto="JNE";
         }
         return salto;
     }

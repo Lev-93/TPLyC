@@ -6,6 +6,7 @@ string cadena
 c=3
 a=1
 b=0
+d=4
 if(a==1){
 b=3
 }
@@ -18,8 +19,8 @@ b=3
 while(a<b or c==b){
 a=a+1
 }
-write("Ingrese cadena:")
-read(cadena)
+write("Ingrese un numero:")
+read(e)
 write(cadena)
 
 timer(4,write("Hola mundo"))
