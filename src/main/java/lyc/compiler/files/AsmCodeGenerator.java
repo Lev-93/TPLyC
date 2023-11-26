@@ -43,6 +43,23 @@ private void escribirPrograma(FileWriter fileWriter) throws IOException{
             if(t.getOperador().equals("=")){
                 if(t.getOperando2().equals("READ")){
                     //A IMPLEMENTAR
+                    fileWriter.write("datos segment\n");
+                    fileWriter.write("letrero1 db 10,13,'$'\n");
+                    fileWriter.write("datos ends\n");
+
+                    //fileWriter.write("assume ds:datos\n");
+                    fileWriter.write("mov ax,datos\n");
+                    fileWriter.write("mov ds,ax\n");
+
+                    fileWriter.write("mov ah,09h\n");
+                    fileWriter.write("lea dx, letrero1\n");
+                    fileWriter.write("int 21h\n");
+                    //si en efecto se desea ingresar un numero entero deberíamos restar 30 debido a que dicho digito en ASCII representa otro valor...
+                    //if(t.getTipoDatoTerceto().equals("int"))
+                        //fileWriter.write("SUB dx,30h\n");
+                    String Aux = "mov "+t.getOperando1()+",dx\n";
+                    System.out.println(Aux);
+                    fileWriter.write(Aux);
                 }else{
                     fileWriter.write("FSTP " + t.getOperando1() + "\n");
                 }
