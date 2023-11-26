@@ -10,11 +10,22 @@ public class Terceto {
     public int nroTerceto;
     public static int cant = 1;
 
+    public boolean isRecorrido() {
+        return recorrido;
+    }
+
+    public void setRecorrido(boolean recorrido) {
+        this.recorrido = recorrido;
+    }
+
+    boolean recorrido;
+
     public Terceto(String operador, String operando1, String operador2) {
         this.operador = operador;
         this.operando1 = operando1;
         this.operando2 = operador2;
         this.nroTerceto = cant;
+        recorrido=false;
         cant++;
     }
 

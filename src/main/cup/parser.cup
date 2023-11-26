@@ -78,7 +78,7 @@ non terminal if;
 // Start Symbol Definition
 start with principio;
 
-principio ::= INIT OPEN_LLAVE declaracion CLOSE_LLAVE programa {: System.out.println("Programa"); :};
+principio ::= INIT OPEN_LLAVE declaracion CLOSE_LLAVE programa {: System.out.println("Programa");:};
 
 declaracion ::= declaracion variableIniciada {: System.out.println("Declaracion de variable"); :};
 declaracion ::= variableIniciada {: System.out.println("Declaracion de variable"); :};
