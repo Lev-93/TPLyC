@@ -42,8 +42,63 @@ private void escribirPrograma(FileWriter fileWriter) throws IOException{
             fileWriter.write( t.getNroTerceto() + ":" + "\n");
             if(t.getOperador().equals("=")){
                 if(t.getOperando2().equals("READ")){
+                    fileWriter.write("MOV ah,3fh"+"\n");
+					fileWriter.write("MOV bx,00h"+"\n");
+				    fileWriter.write("MOV cx,42"+"\n");
+					fileWriter.write("MOV dx,offset [input]"+"\n");
+				    fileWriter.write("INT 21h"+"\n");
+					for(Simbolo s: TS)
+					{	if(s.getNombre().equals(t.getOperando1()))
+						{
+						 if(s.getTipo().equals("int"))
+						 {
+							fileWriter.write("MOV si,1"+"\n");
+						    fileWriter.write("FLD input[0]" + "\n");
+							fileWriter.write("FCOM 45"+"\n");
+							fileWriter.write("FSTSW AX" + "\n");
+							fileWriter.write("SAHF" + "\n");
+							fileWriter.write("JNE convertir_a_entero:" + "\n");
+							
+							fileWriter.write("FLD input[1]" + "\n");
+							fileWriter.write("FSUB 30h" + "\n");
+							fileWriter.write("INC si" + "\n");
+							
+							fileWriter.write("convertir_a_entero:" + "\n");
+							fileWriter.write("CMP input[si],13"+ "\n");
+							fileWriter.write("JE final_convertir:" + "\n");
+						    fileWriter.write("FLD 10"+ "\n");
+							fileWriter.write("FMUL"+ "\n");
+							fileWriter.write("FLD input[si]"+ "\n");
+							fileWriter.write("FSUB 30h"+ "\n");
+							fileWriter.write("FADD"+ "\n");							
+							fileWriter.write("INC si" + "\n");
+							fileWriter.write("JMP convertir_a_entero" + "\n");
+							fileWriter.write("final_convertir:" + "\n");
+							fileWriter.write("FLD input[0]" + "\n");
+							fileWriter.write("FCOM 45"+"\n");
+							fileWriter.write("FSTSW AX" + "\n");
+							fileWriter.write("SAHF" + "\n");
+							fileWriter.write("JNE guardar_entero_leido" + "\n");
+							fileWriter.write("FMUL -1"+"\n");
+							fileWriter.write("guardar_entero_leido:" + "\n");
+						 	fileWriter.write("FSTP " + t.getOperando1()+"\n");
+						 
+						    }else if(s.getTipo().equals("string"))
+							{
+							  fileWriter.write("MOV si,0"+"\n");
+							  fileWriter.write("copiar_cadena:");
+						      fileWriter.write("CMP input[si],13"+ "\n");
+							  fileWriter.write("JE final_copiado:" + "\n");
+							  fileWriter.write("FLD input[si]" + "\n");
+							  fileWriter.write("FSTP " +t.getOperando2()+"[si]\n");
+							  fileWriter.write("INC si\n");
+							  fileWriter.write("JMP copiar_cadena" + "\n");
+							  fileWriter.write("final_copiado:"+ "\n");
+							}
                     //A IMPLEMENTAR
-                    fileWriter.write("datos segment\n");
+                    
+                             
+                   /* fileWriter.write("datos segment\n");
                     fileWriter.write("letrero1 db 10,13,'$'\n");
                     fileWriter.write("datos ends\n");
 
@@ -59,7 +114,7 @@ private void escribirPrograma(FileWriter fileWriter) throws IOException{
                         //fileWriter.write("SUB dx,30h\n");
                     String Aux = "mov "+t.getOperando1()+",dx\n";
                     System.out.println(Aux);
-                    fileWriter.write(Aux);
+                    fileWriter.write(Aux);*/
                 }else{
                     fileWriter.write("FSTP " + t.getOperando1() + "\n");
                 }
