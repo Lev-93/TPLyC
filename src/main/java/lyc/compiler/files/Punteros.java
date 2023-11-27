@@ -34,6 +34,15 @@ public class Punteros {
     static int auxiliarWhile=0;
     static int auxiliarOr=0;
     static int auxiliarThen=0;
+    static int auxiliarFirstIndex=0;
+    public static int getAuxiliarFirstIndex() {
+        return auxiliarFirstIndex;
+    }
+
+    public static void setAuxiliarFirstIndex(int auxiliarFirstIndex) {
+        Punteros.auxiliarFirstIndex = auxiliarFirstIndex;
+    }
+
 
 
     public static int getAuxiliarThen() {
