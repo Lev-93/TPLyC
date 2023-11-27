@@ -105,6 +105,10 @@ private void escribirPrograma(FileWriter fileWriter) throws IOException{
                 fileWriter.write("MOV AH,9"+ "\n");
                 fileWriter.write("INT 21h"+ "\n");
                 t.setRecorrido(true);
+            } else if (t.getOperador().equals("TIMER")) {
+                fileWriter.write("MOV DX,OFFSET " +  (tercetos.get(Integer.parseInt(t.getOperando2())-1)).getOperando1()+ "\n");
+                fileWriter.write("MOV AH,9"+ "\n");
+                fileWriter.write("INT 21h"+ "\n");
             } else {
                 fileWriter.write("FLD "+ t.getOperador() +"\n");
             }
