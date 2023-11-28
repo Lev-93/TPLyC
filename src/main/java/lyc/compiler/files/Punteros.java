@@ -27,6 +27,7 @@ public class Punteros {
     static int indiceDeclaracion=0;
     static int indicePrincipio=0;
     static int indiceThen=0;
+	static int auxiliarFirstIndex=0;
 
     static int auxiliar1=0;
     static int auxiliar2=0;
@@ -34,15 +35,6 @@ public class Punteros {
     static int auxiliarWhile=0;
     static int auxiliarOr=0;
     static int auxiliarThen=0;
-    static int auxiliarFirstIndex=0;
-    public static int getAuxiliarFirstIndex() {
-        return auxiliarFirstIndex;
-    }
-
-    public static void setAuxiliarFirstIndex(int auxiliarFirstIndex) {
-        Punteros.auxiliarFirstIndex = auxiliarFirstIndex;
-    }
-
 
 
     public static int getAuxiliarThen() {
@@ -295,4 +287,11 @@ public class Punteros {
     public void setIndicePrincipio(int indicePrincipio) {
         this.indicePrincipio = indicePrincipio;
     }
+	public static int getAuxiliarFirstIndex() {
+		return auxiliarFirstIndex;
+	}
+ 
+    public static void setAuxiliarFirstIndex(int auxiliarFirstIndex) {
+		Punteros.auxiliarFirstIndex = auxiliarFirstIndex;
+	}
 }
